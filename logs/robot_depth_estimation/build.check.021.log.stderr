@@ -1,9 +1,0 @@
-[31m[1mCMake Error[0m at /home/user/depth_infer/src/robot_depth_estimation/CMakeLists.txt:40 (add_library):
-  add_library cannot create target "robot_depth_estimation_node" because
-  another target with the same name already exists.  The existing target is
-  an executable created in source directory
-  "/home/user/depth_infer/src/robot_depth_estimation".  See documentation for
-  policy CMP0002 for more details.
-
-
-make: *** [Makefile:1330: cmake_check_build_system] Error 1

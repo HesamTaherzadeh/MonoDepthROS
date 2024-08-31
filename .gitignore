@@ -4,3 +4,5 @@ logs/
 *.onnx
 *.png
 *.jpeg
+.vscode/
+.catkin_tools/

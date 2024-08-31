@@ -1,7 +1,0 @@
-[01m[K/home/user/depth_infer/src/robot_depth_estimation/src/depth_infer.cpp:1:10:[m[K [01;31m[Kfatal error: [m[Kmodel_reader.hpp: No such file or directory
-    1 | #include [01;31m[K"model_reader.hpp"[m[K
-      |          [01;31m[K^~~~~~~~~~~~~~~~~~[m[K
-compilation terminated.
-make[2]: *** [CMakeFiles/robot_depth_estimation_node.dir/build.make:63: CMakeFiles/robot_depth_estimation_node.dir/src/depth_infer.cpp.o] Error 1
-make[1]: *** [CMakeFiles/Makefile2:210: CMakeFiles/robot_depth_estimation_node.dir/all] Error 2
-make: *** [Makefile:141: all] Error 2
