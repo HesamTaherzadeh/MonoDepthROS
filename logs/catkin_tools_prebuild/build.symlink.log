@@ -1,0 +1,12 @@
+Symlinking /home/user/depth_infer/devel/./cmake.lock
+Symlinking /home/user/depth_infer/devel/./local_setup.zsh
+Symlinking /home/user/depth_infer/devel/./env.sh
+Symlinking /home/user/depth_infer/devel/./setup.zsh
+Symlinking /home/user/depth_infer/devel/./setup.sh
+Symlinking /home/user/depth_infer/devel/./_setup_util.py
+Symlinking /home/user/depth_infer/devel/./setup.bash
+Symlinking /home/user/depth_infer/devel/./local_setup.bash
+Symlinking /home/user/depth_infer/devel/./local_setup.sh
+Symlinking /home/user/depth_infer/devel/lib/pkgconfig/catkin_tools_prebuild.pc
+Symlinking /home/user/depth_infer/devel/share/catkin_tools_prebuild/cmake/catkin_tools_prebuildConfig.cmake
+Symlinking /home/user/depth_infer/devel/share/catkin_tools_prebuild/cmake/catkin_tools_prebuildConfig-version.cmake

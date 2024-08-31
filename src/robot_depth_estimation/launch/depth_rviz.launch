@@ -1,0 +1,16 @@
+<launch>
+  <!-- Start the depth estimation node -->
+  <node pkg="robot_depth_estimation" type="robot_depth_estimation_node" name="depth_estimation_node" output="screen">
+    <param name="model_path" value="/home/user/depth_infer/src/robot_depth_estimation/model/unidepthv2_vits14_simp.onnx" />
+    <param name="image_width" value="644" />
+    <param name="image_height" value="364" />
+  </node>
+
+  <!-- Start RViz -->
+  <node pkg="rviz" type="rviz" name="rviz" output="screen">
+    <param name="config" value="$(find robot_depth_estimation)/cfg/rviz.rviz"/>
+  </node>
+
+  <node pkg="tf" type="static_transform_publisher" name="depth_link" args="0 0 0 0 0 0 map cam02 100"/>
+
+</launch>

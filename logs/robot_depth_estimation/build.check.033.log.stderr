@@ -1,0 +1,23 @@
+[31m[1mCMake Error[0m at /usr/local/share/cmake/onnxruntime/onnxruntimeTargets.cmake:84 (message):
+  The imported target "onnxruntime::onnxruntime" references the file
+
+     "/usr/local/lib64/libonnxruntime.so.1.19.0"
+
+  but this file does not exist.  Possible reasons include:
+
+  * The file was deleted, renamed, or moved to another location.
+
+  * An install or uninstall procedure did not complete successfully.
+
+  * The installation package was faulty and contained
+
+     "/usr/local/share/cmake/onnxruntime/onnxruntimeTargets.cmake"
+
+  but not all the files it references.
+
+[36mCall Stack (most recent call first):[0m
+  /usr/local/share/cmake/onnxruntime/onnxruntimeConfig.cmake:26 (include)
+  CMakeLists.txt:15 (find_package)
+
+
+make: *** [Makefile:1360: cmake_check_build_system] Error 1

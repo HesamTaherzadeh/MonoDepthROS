@@ -1,0 +1,5 @@
+build/
+devel/
+*.onnx
+*.png
+*.jpeg

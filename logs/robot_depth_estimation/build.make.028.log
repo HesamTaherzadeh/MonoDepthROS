@@ -1,0 +1,141 @@
+[  0%] Built target std_srvs_generate_messages_eus
+[  0%] Built target dynamic_reconfigure_gencfg
+[  0%] Built target dynamic_reconfigure_generate_messages_eus
+[  0%] Built target tf2_msgs_generate_messages_cpp
+[  0%] Built target gazebo_msgs_generate_messages_py
+[  0%] Built target std_msgs_generate_messages_nodejs
+[  0%] Built target actionlib_generate_messages_cpp
+[  0%] Built target gazebo_msgs_generate_messages_nodejs
+[  0%] Built target actionlib_msgs_generate_messages_py
+[  0%] Built target geometry_msgs_generate_messages_eus
+[  0%] Built target trajectory_msgs_generate_messages_lisp
+[  0%] Built target trajectory_msgs_generate_messages_nodejs
+[  0%] Built target gazebo_msgs_generate_messages_cpp
+[  0%] Built target trajectory_msgs_generate_messages_cpp
+[  0%] Built target rosgraph_msgs_generate_messages_nodejs
+[  0%] Built target std_srvs_generate_messages_lisp
+[  0%] Built target std_msgs_generate_messages_cpp
+[  0%] Built target tf_generate_messages_eus
+[  0%] Built target dynamic_reconfigure_generate_messages_lisp
+[  0%] Built target std_msgs_generate_messages_py
+[  0%] Built target roscpp_generate_messages_py
+[  0%] Built target gazebo_ros_gencfg
+[  0%] Built target actionlib_msgs_generate_messages_eus
+[  0%] Built target rosgraph_msgs_generate_messages_py
+[  0%] Built target std_srvs_generate_messages_nodejs
+[  0%] Built target tf_generate_messages_cpp
+[  0%] Built target rosgraph_msgs_generate_messages_lisp
+[  0%] Built target sensor_msgs_generate_messages_py
+[  0%] Built target actionlib_generate_messages_lisp
+[  0%] Built target roscpp_generate_messages_nodejs
+[  0%] Built target roscpp_generate_messages_lisp
+[  0%] Built target dynamic_reconfigure_generate_messages_py
+[  0%] Built target _catkin_empty_exported_target
+[  0%] Built target std_msgs_generate_messages_lisp
+[  0%] Built target std_srvs_generate_messages_cpp
+[  0%] Built target trajectory_msgs_generate_messages_eus
+[  0%] Built target roscpp_generate_messages_eus
+[  0%] Built target geometry_msgs_generate_messages_lisp
+[  0%] Built target roscpp_generate_messages_cpp
+[  0%] Built target geometry_msgs_generate_messages_py
+[  0%] Built target gazebo_msgs_generate_messages_lisp
+[  0%] Built target std_srvs_generate_messages_py
+[  0%] Built target tf_generate_messages_lisp
+[  0%] Built target sensor_msgs_generate_messages_nodejs
+[  0%] Built target trajectory_msgs_generate_messages_py
+[  0%] Built target sensor_msgs_generate_messages_eus
+[  0%] Built target tf2_msgs_generate_messages_py
+[  0%] Built target actionlib_generate_messages_eus
+[  0%] Built target rosgraph_msgs_generate_messages_eus
+[  0%] Built target tf2_msgs_generate_messages_eus
+[  0%] Built target geometry_msgs_generate_messages_cpp
+[  0%] Built target dynamic_reconfigure_generate_messages_cpp
+[  0%] Built target rosgraph_msgs_generate_messages_cpp
+[  0%] Built target sensor_msgs_generate_messages_cpp
+[  0%] Built target sensor_msgs_generate_messages_lisp
+[  0%] Built target actionlib_msgs_generate_messages_cpp
+[  0%] Built target dynamic_reconfigure_generate_messages_nodejs
+[  0%] Built target tf_generate_messages_nodejs
+[  0%] Built target actionlib_generate_messages_py
+[  0%] Built target actionlib_generate_messages_nodejs
+[  0%] Built target actionlib_msgs_generate_messages_nodejs
+[  0%] Built target gazebo_msgs_generate_messages_eus
+[  0%] Built target geometry_msgs_generate_messages_nodejs
+[  0%] Built target actionlib_msgs_generate_messages_lisp
+[  0%] Built target tf2_msgs_generate_messages_lisp
+[  0%] Built target tf_generate_messages_py
+[  0%] Built target robot_depth_estimation_xacro_generated_to_devel_space_
+[  0%] Built target tf2_msgs_generate_messages_nodejs
+[  0%] Built target std_msgs_generate_messages_eus
+[35m[1mScanning dependencies of target robot_depth_estimation_node[0m
+[ 33%] [32mBuilding CXX object CMakeFiles/robot_depth_estimation_node.dir/src/depth_estimation_node.cpp.o[0m
+[ 66%] [32mBuilding CXX object CMakeFiles/robot_depth_estimation_node.dir/src/depth_infer.cpp.o[0m
+In file included from [01m[K/home/user/depth_infer/src/robot_depth_estimation/include/depth_infer.hpp:12[m[K,
+                 from [01m[K/home/user/depth_infer/src/robot_depth_estimation/src/depth_infer.cpp:1[m[K:
+[01m[K/usr/local/include/onnxruntime/onnxruntime_cxx_api.h:[m[K In constructor ‘[01m[KOrt::Float16_t::Float16_t(uint16_t)[m[K’:
+[01m[K/usr/local/include/onnxruntime/onnxruntime_cxx_api.h:171:64:[m[K [01;31m[Kerror: [m[K‘[01m[Kconstexpr[m[K’ constructor does not have empty body
+  171 |   constexpr explicit Float16_t(uint16_t v) noexcept { val = v; [01;31m[K}[m[K
+      |                                                                [01;31m[K^[m[K
+[01m[K/usr/local/include/onnxruntime/onnxruntime_cxx_api.h:[m[K In static member function ‘[01m[Kstatic constexpr Ort::Float16_t Ort::Float16_t::FromBits(uint16_t)[m[K’:
+[01m[K/usr/local/include/onnxruntime/onnxruntime_cxx_api.h:186:83:[m[K [01;31m[Kerror: [m[Kcall to non-‘[01m[Kconstexpr[m[K’ function ‘[01m[KOrt::Float16_t::Float16_t(uint16_t)[m[K’
+  186 |   constexpr static Float16_t FromBits(uint16_t v) noexcept { return Float16_t(v); [01;31m[K}[m[K
+      |                                                                                   [01;31m[K^[m[K
+[01m[K/usr/local/include/onnxruntime/onnxruntime_cxx_api.h:171:22:[m[K [01;36m[Knote: [m[K‘[01m[KOrt::Float16_t::Float16_t(uint16_t)[m[K’ declared here
+  171 |   constexpr explicit [01;36m[KFloat16_t[m[K(uint16_t v) noexcept { val = v; }
+      |                      [01;36m[K^~~~~~~~~[m[K
+[01m[K/usr/local/include/onnxruntime/onnxruntime_cxx_api.h:[m[K In constructor ‘[01m[KOrt::BFloat16_t::BFloat16_t(uint16_t)[m[K’:
+[01m[K/usr/local/include/onnxruntime/onnxruntime_cxx_api.h:315:65:[m[K [01;31m[Kerror: [m[K‘[01m[Kconstexpr[m[K’ constructor does not have empty body
+  315 |   constexpr explicit BFloat16_t(uint16_t v) noexcept { val = v; [01;31m[K}[m[K
+      |                                                                 [01;31m[K^[m[K
+[01m[K/usr/local/include/onnxruntime/onnxruntime_cxx_api.h:[m[K In static member function ‘[01m[Kstatic constexpr Ort::BFloat16_t Ort::BFloat16_t::FromBits(uint16_t)[m[K’:
+[01m[K/usr/local/include/onnxruntime/onnxruntime_cxx_api.h:327:85:[m[K [01;31m[Kerror: [m[Kcall to non-‘[01m[Kconstexpr[m[K’ function ‘[01m[KOrt::BFloat16_t::BFloat16_t(uint16_t)[m[K’
+  327 |   static constexpr BFloat16_t FromBits(uint16_t v) noexcept { return BFloat16_t(v); [01;31m[K}[m[K
+      |                                                                                     [01;31m[K^[m[K
+[01m[K/usr/local/include/onnxruntime/onnxruntime_cxx_api.h:315:22:[m[K [01;36m[Knote: [m[K‘[01m[KOrt::BFloat16_t::BFloat16_t(uint16_t)[m[K’ declared here
+  315 |   constexpr explicit [01;36m[KBFloat16_t[m[K(uint16_t v) noexcept { val = v; }
+      |                      [01;36m[K^~~~~~~~~~[m[K
+In file included from [01m[K/usr/local/include/onnxruntime/onnxruntime_cxx_api.h:27[m[K,
+                 from [01m[K/home/user/depth_infer/src/robot_depth_estimation/include/depth_infer.hpp:12[m[K,
+                 from [01m[K/home/user/depth_infer/src/robot_depth_estimation/src/depth_infer.cpp:1[m[K:
+/usr/local/include/onnxruntime/onnxruntime_float16.h: In instantiation of ‘[01m[Kstatic constexpr uint16_t onnxruntime_float16::Float16Impl<Derived>::ToUint16Impl(float) [with Derived = Ort::Float16_t; uint16_t = short unsigned int][m[K’:
+[01m[K/usr/local/include/onnxruntime/onnxruntime_cxx_api.h:192:54:[m[K   required from here
+[01m[K/usr/local/include/onnxruntime/onnxruntime_float16.h:293:1:[m[K [01;31m[Kerror: [m[Kbody of ‘[01m[Kconstexpr[m[K’ function ‘[01m[Kstatic constexpr uint16_t onnxruntime_float16::Float16Impl<Derived>::ToUint16Impl(float) [with Derived = Ort::Float16_t; uint16_t = short unsigned int][m[K’ not a return-statement
+  293 | [01;31m[K}[m[K
+      | [01;31m[K^[m[K
+make[2]: *** [CMakeFiles/robot_depth_estimation_node.dir/build.make:76: CMakeFiles/robot_depth_estimation_node.dir/src/depth_infer.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+In file included from [01m[K/home/user/depth_infer/src/robot_depth_estimation/include/depth_infer.hpp:12[m[K,
+                 from [01m[K/home/user/depth_infer/src/robot_depth_estimation/src/depth_estimation_node.cpp:5[m[K:
+[01m[K/usr/local/include/onnxruntime/onnxruntime_cxx_api.h:[m[K In constructor ‘[01m[KOrt::Float16_t::Float16_t(uint16_t)[m[K’:
+[01m[K/usr/local/include/onnxruntime/onnxruntime_cxx_api.h:171:64:[m[K [01;31m[Kerror: [m[K‘[01m[Kconstexpr[m[K’ constructor does not have empty body
+  171 |   constexpr explicit Float16_t(uint16_t v) noexcept { val = v; [01;31m[K}[m[K
+      |                                                                [01;31m[K^[m[K
+[01m[K/usr/local/include/onnxruntime/onnxruntime_cxx_api.h:[m[K In static member function ‘[01m[Kstatic constexpr Ort::Float16_t Ort::Float16_t::FromBits(uint16_t)[m[K’:
+[01m[K/usr/local/include/onnxruntime/onnxruntime_cxx_api.h:186:83:[m[K [01;31m[Kerror: [m[Kcall to non-‘[01m[Kconstexpr[m[K’ function ‘[01m[KOrt::Float16_t::Float16_t(uint16_t)[m[K’
+  186 |   constexpr static Float16_t FromBits(uint16_t v) noexcept { return Float16_t(v); [01;31m[K}[m[K
+      |                                                                                   [01;31m[K^[m[K
+[01m[K/usr/local/include/onnxruntime/onnxruntime_cxx_api.h:171:22:[m[K [01;36m[Knote: [m[K‘[01m[KOrt::Float16_t::Float16_t(uint16_t)[m[K’ declared here
+  171 |   constexpr explicit [01;36m[KFloat16_t[m[K(uint16_t v) noexcept { val = v; }
+      |                      [01;36m[K^~~~~~~~~[m[K
+[01m[K/usr/local/include/onnxruntime/onnxruntime_cxx_api.h:[m[K In constructor ‘[01m[KOrt::BFloat16_t::BFloat16_t(uint16_t)[m[K’:
+[01m[K/usr/local/include/onnxruntime/onnxruntime_cxx_api.h:315:65:[m[K [01;31m[Kerror: [m[K‘[01m[Kconstexpr[m[K’ constructor does not have empty body
+  315 |   constexpr explicit BFloat16_t(uint16_t v) noexcept { val = v; [01;31m[K}[m[K
+      |                                                                 [01;31m[K^[m[K
+[01m[K/usr/local/include/onnxruntime/onnxruntime_cxx_api.h:[m[K In static member function ‘[01m[Kstatic constexpr Ort::BFloat16_t Ort::BFloat16_t::FromBits(uint16_t)[m[K’:
+[01m[K/usr/local/include/onnxruntime/onnxruntime_cxx_api.h:327:85:[m[K [01;31m[Kerror: [m[Kcall to non-‘[01m[Kconstexpr[m[K’ function ‘[01m[KOrt::BFloat16_t::BFloat16_t(uint16_t)[m[K’
+  327 |   static constexpr BFloat16_t FromBits(uint16_t v) noexcept { return BFloat16_t(v); [01;31m[K}[m[K
+      |                                                                                     [01;31m[K^[m[K
+[01m[K/usr/local/include/onnxruntime/onnxruntime_cxx_api.h:315:22:[m[K [01;36m[Knote: [m[K‘[01m[KOrt::BFloat16_t::BFloat16_t(uint16_t)[m[K’ declared here
+  315 |   constexpr explicit [01;36m[KBFloat16_t[m[K(uint16_t v) noexcept { val = v; }
+      |                      [01;36m[K^~~~~~~~~~[m[K
+In file included from [01m[K/usr/local/include/onnxruntime/onnxruntime_cxx_api.h:27[m[K,
+                 from [01m[K/home/user/depth_infer/src/robot_depth_estimation/include/depth_infer.hpp:12[m[K,
+                 from [01m[K/home/user/depth_infer/src/robot_depth_estimation/src/depth_estimation_node.cpp:5[m[K:
+/usr/local/include/onnxruntime/onnxruntime_float16.h: In instantiation of ‘[01m[Kstatic constexpr uint16_t onnxruntime_float16::Float16Impl<Derived>::ToUint16Impl(float) [with Derived = Ort::Float16_t; uint16_t = short unsigned int][m[K’:
+[01m[K/usr/local/include/onnxruntime/onnxruntime_cxx_api.h:192:54:[m[K   required from here
+[01m[K/usr/local/include/onnxruntime/onnxruntime_float16.h:293:1:[m[K [01;31m[Kerror: [m[Kbody of ‘[01m[Kconstexpr[m[K’ function ‘[01m[Kstatic constexpr uint16_t onnxruntime_float16::Float16Impl<Derived>::ToUint16Impl(float) [with Derived = Ort::Float16_t; uint16_t = short unsigned int][m[K’ not a return-statement
+  293 | [01;31m[K}[m[K
+      | [01;31m[K^[m[K
+make[2]: *** [CMakeFiles/robot_depth_estimation_node.dir/build.make:63: CMakeFiles/robot_depth_estimation_node.dir/src/depth_estimation_node.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:277: CMakeFiles/robot_depth_estimation_node.dir/all] Error 2
+make: *** [Makefile:141: all] Error 2
