@@ -8,6 +8,7 @@ endif()
 # Find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(tf2_ros REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(cv_bridge REQUIRED)
@@ -30,6 +31,7 @@ add_executable(slam_node src/depth_node.cpp src/model_reader.cpp)
 target_link_libraries(slam_node ${onnxruntime_LIBRARY} ${OpenCV_LIBS} ${CUDA_LIBRARIES} ${CUDNN_LIBRARY})
 
 ament_target_dependencies(slam_node
+  tf2_ros
   rclcpp
   cv_bridge
   std_msgs
@@ -48,6 +50,10 @@ endif()
 # Install target
 install(TARGETS slam_node
   DESTINATION lib/${PROJECT_NAME}
+)
+
+install(DIRECTORY launch/
+  DESTINATION share/${PROJECT_NAME}/launch
 )
 
 ament_package()
