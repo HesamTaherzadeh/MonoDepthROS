@@ -11,10 +11,12 @@ find_package(rclcpp REQUIRED)
 find_package(tf2_ros REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
+find_package(nav_msgs REQUIRED)
 find_package(cv_bridge REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(CUDA REQUIRED)
 find_library(CUDNN_LIBRARY cudnn HINTS /usr/lib/x86_64-linux-gnu /usr/local/cuda/lib64)
+find_package(tf2_geometry_msgs REQUIRED)
 
 # Manually find onnxruntime
 find_package(onnxruntime REQUIRED)
@@ -34,8 +36,10 @@ ament_target_dependencies(slam_node
   tf2_ros
   rclcpp
   cv_bridge
+  nav_msgs
   std_msgs
   sensor_msgs
+  tf2_geometry_msgs
   OpenCV
   CUDA
 )
@@ -54,6 +58,10 @@ install(TARGETS slam_node
 
 install(DIRECTORY launch/
   DESTINATION share/${PROJECT_NAME}/launch
+)
+
+install(DIRECTORY urdf
+  DESTINATION share/${PROJECT_NAME}
 )
 
 ament_package()

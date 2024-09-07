@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<robot name="robot">
+  <!-- Base Link -->
+  <link name="base_link"/>
+
+  <!-- Camera Link attached to base_link -->
+  <joint name="base_to_camera" type="fixed">
+    <parent link="base_link"/>
+    <child link="camera_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <link name="camera_link"/>
+
+  <!-- Left camera -->
+  <joint name="camera_to_left" type="fixed">
+    <parent link="camera_link"/>
+    <child link="left"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <link name="left"/>
+
+  <!-- Right camera -->
+  <joint name="camera_to_right" type="fixed">
+    <parent link="camera_link"/>
+    <child link="right"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <link name="right"/>
+</robot>
