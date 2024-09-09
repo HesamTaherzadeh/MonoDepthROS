@@ -8,6 +8,7 @@ endif()
 # Find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(pcl_conversions REQUIRED)
 find_package(tf2_ros REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
@@ -17,6 +18,7 @@ find_package(OpenCV REQUIRED)
 find_package(CUDA REQUIRED)
 find_library(CUDNN_LIBRARY cudnn HINTS /usr/lib/x86_64-linux-gnu /usr/local/cuda/lib64)
 find_package(tf2_geometry_msgs REQUIRED)
+find_package(PCL REQUIRED)
 
 # Manually find onnxruntime
 find_package(onnxruntime REQUIRED)
@@ -30,11 +32,12 @@ include_directories(include ${OpenCV_INCLUDE_DIRS} ${CUDA_INCLUDE_DIRS})
 # Add executable
 add_executable(slam_node src/depth_node.cpp src/model_reader.cpp)
 
-target_link_libraries(slam_node ${onnxruntime_LIBRARY} ${OpenCV_LIBS} ${CUDA_LIBRARIES} ${CUDNN_LIBRARY})
+target_link_libraries(slam_node ${onnxruntime_LIBRARY} ${OpenCV_LIBS} ${CUDA_LIBRARIES} ${CUDNN_LIBRARY} ${PCL_LIBRARIES})
 
 ament_target_dependencies(slam_node
   tf2_ros
   rclcpp
+  pcl_conversions
   cv_bridge
   nav_msgs
   std_msgs
@@ -42,6 +45,7 @@ ament_target_dependencies(slam_node
   tf2_geometry_msgs
   OpenCV
   CUDA
+  PCL
 )
 
 

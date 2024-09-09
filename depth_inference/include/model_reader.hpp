@@ -13,6 +13,7 @@
 #include <iostream>
 #include <vector>
 #include <opencv2/opencv.hpp>
+#include <definitions.h>
 
 /**
  * @class ModelRunner
@@ -79,6 +80,8 @@ private:
 
     int imageWidth_;  /**< The width of the input image expected by the model. */
     int imageHeight_; /**< The height of the input image expected by the model. */
+    cv::Mat K;
+    
 };
 
 #endif /* MODEL_READER_HPP */

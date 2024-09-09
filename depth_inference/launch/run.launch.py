@@ -63,7 +63,7 @@ def generate_launch_description():
             package='rtabmap_odom', 
             executable='rgbd_odometry', 
             name="rgbd_odometry", 
-            output="screen",
+             arguments=['--ros-args', '--log-level', 'error'],
             parameters=[{
                 "frame_id": "base_link",                        # Default frame ID
                 "odom_frame_id": "odom",                          # Default odom frame ID
@@ -94,8 +94,8 @@ def generate_launch_description():
             package='rtabmap_slam',
             executable='rtabmap',
             name='rtabmap',
-            output='screen',
             parameters=parameters,
+            arguments=['--ros-args', '--log-level', 'error'],
             remappings=[
                 ('/rgb/image', '/left'),
                 ('/rgb/camera_info', '/camera2/left/camera_info'),

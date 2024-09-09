@@ -1,6 +1,13 @@
 #include "depth_node.hpp"
 
-SlamNode::SlamNode() : Node("slam_node") {
+SlamNode::SlamNode() : Node("slam_node") 
+, cloud(std::make_shared<pcl::PointCloud<pcl::PointXYZRGB>>()){
+    /**
+    !TODO : 
+        - create a config file
+        - Resolve the issue about odometry failure 
+
+     */
     model_runner_ = std::make_shared<ModelRunner>("/home/hesam/Desktop/playground/depth_node/src/unidepthv2_vits14_simp.onnx", 644, 364);
 
     depth_image_publisher_ = this->create_publisher<sensor_msgs::msg::Image>("depth_image", 100);
@@ -10,6 +17,12 @@ SlamNode::SlamNode() : Node("slam_node") {
     image_subscriber_ = this->create_subscription<sensor_msgs::msg::Image>(
         "/camera2/left/image_raw", 100,
         std::bind(&SlamNode::image_callback, this, std::placeholders::_1)
+    );
+
+
+    point_cloud_subscriber = this->create_subscription<sensor_msgs::msg::PointCloud2>(
+        "/cloud_map", 100,
+        std::bind(&SlamNode::map_cloud_callback, this, std::placeholders::_1)
     );
 
     camera_info_subscriber_ = this->create_subscription<sensor_msgs::msg::CameraInfo>(
@@ -32,7 +45,13 @@ SlamNode::SlamNode() : Node("slam_node") {
     car_base_odom_publisher_ = this->create_publisher<nav_msgs::msg::Odometry>("/car/base/odom_corrected", 10);
     odom_publisher_ = this->create_publisher<nav_msgs::msg::Odometry>("/odom_normalized", 10);
 
+    // std::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB>> cloud = std::make_shared<pcl::PointXYZRGB>();
 }
+
+ SlamNode::~SlamNode() {
+    RCLCPP_INFO(this->get_logger(), "SlamNode is shutting down, saving point cloud...");
+    this->save_cloud();
+    };
 
 void SlamNode::image_callback(const sensor_msgs::msg::Image::SharedPtr msg) {
     cv::Mat input_image = cv_bridge::toCvShare(msg)->image;
@@ -56,7 +75,7 @@ void SlamNode::image_callback(const sensor_msgs::msg::Image::SharedPtr msg) {
     cv::Mat depth_image = model_runner_->runInference(input_image);
 
     cv::Mat depth_converted;
-    depth_image.convertTo(depth_converted, CV_16UC1, 256);
+    depth_image.convertTo(depth_converted, CV_16UC1, 250);
 
     sensor_msgs::msg::Image::SharedPtr depth_msg = cv_bridge::CvImage(
         header, 
@@ -102,9 +121,32 @@ void SlamNode::odom_callback(const nav_msgs::msg::Odometry::SharedPtr msg) {
     corrected_msg.pose.pose.orientation = tf2::toMsg(q);
     odom_publisher_->publish(corrected_msg);
 }
-int main(int argc, char* argv[]) {
+void SlamNode::map_cloud_callback(const sensor_msgs::msg::PointCloud2::SharedPtr msg) {
+    if (!cloud) {
+        RCLCPP_ERROR(this->get_logger(), "Cloud is not initialized!");
+        return;
+    }
+
+    pcl::fromROSMsg(*msg, *cloud);
+
+
+    RCLCPP_INFO(this->get_logger(), "PointCloud received and added to cloud.");
+}
+
+void SlamNode::save_cloud() {
+    if (cloud && !cloud->empty()) {
+        pcl::io::savePCDFileASCII("/home/hesam/Desktop/pointcloud.pcd", *cloud);
+        RCLCPP_INFO(this->get_logger(), "PointCloud saved to /home/hesam/Desktop/pointcloud.pcd.");
+    } else {
+        RCLCPP_WARN(this->get_logger(), "No point cloud data to save.");
+    }
+}
+
+int main(int argc, char *argv[])
+{
     rclcpp::init(argc, argv);
-    rclcpp::spin(std::make_shared<SlamNode>());
-    rclcpp::shutdown();
+    auto node = std::make_shared<SlamNode>();
+    rclcpp::spin(node);
+
     return 0;
 }
