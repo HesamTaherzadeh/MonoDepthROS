@@ -7,7 +7,9 @@ Panels:
         - /Global Options1
         - /Status1
         - /Odometry1
+        - /Odometry1/Shape1
         - /Odometry2
+        - /Odometry2/Shape1
         - /Map1
         - /PointCloud21
       Splitter Ratio: 0.5
@@ -102,14 +104,14 @@ Visualization Manager:
       Position Tolerance: 0.10000000149011612
       Shape:
         Alpha: 1
-        Axes Length: 1
-        Axes Radius: 0.10000000149011612
+        Axes Length: 4
+        Axes Radius: 0.5
         Color: 255; 25; 0
         Head Length: 0.30000001192092896
         Head Radius: 0.10000000149011612
         Shaft Length: 1
         Shaft Radius: 0.05000000074505806
-        Value: Arrow
+        Value: Axes
       Topic:
         Depth: 5
         Durability Policy: Volatile
@@ -141,14 +143,14 @@ Visualization Manager:
       Position Tolerance: 0.10000000149011612
       Shape:
         Alpha: 1
-        Axes Length: 1
-        Axes Radius: 0.10000000149011612
+        Axes Length: 4
+        Axes Radius: 0.5
         Color: 255; 25; 0
         Head Length: 0.30000001192092896
         Head Radius: 0.10000000149011612
         Shaft Length: 1
         Shaft Radius: 0.05000000074505806
-        Value: Arrow
+        Value: Axes
       Topic:
         Depth: 5
         Durability Policy: Volatile
@@ -258,7 +260,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 139.74996948242188
+      Distance: 93.89781951904297
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -273,10 +275,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 1.399796485900879
+      Pitch: 1.4547964334487915
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 1.9122627973556519
+      Yaw: 4.277281284332275
     Saved: ~
 Window Geometry:
   Displays:

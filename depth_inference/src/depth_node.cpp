@@ -56,7 +56,7 @@ void SlamNode::image_callback(const sensor_msgs::msg::Image::SharedPtr msg) {
     cv::Mat depth_image = model_runner_->runInference(input_image);
 
     cv::Mat depth_converted;
-    depth_image.convertTo(depth_converted, CV_16UC1, 1000.0);
+    depth_image.convertTo(depth_converted, CV_16UC1, 256);
 
     sensor_msgs::msg::Image::SharedPtr depth_msg = cv_bridge::CvImage(
         header, 
@@ -86,10 +86,8 @@ void SlamNode::car_base_odom_callback(const nav_msgs::msg::Odometry::SharedPtr m
 void SlamNode::odom_callback(const nav_msgs::msg::Odometry::SharedPtr msg) {
     auto corrected_msg = *msg;
 
-    double temp_x = corrected_msg.pose.pose.position.x;
-    corrected_msg.pose.pose.position.x = -corrected_msg.pose.pose.position.z;
-    corrected_msg.pose.pose.position.z = -corrected_msg.pose.pose.position.y;
-    corrected_msg.pose.pose.position.y = temp_x;
+    tf2::Quaternion q1;
+    q1.setRPY(3.14, 0, -1.57);
 
     tf2::Quaternion q(
         corrected_msg.pose.pose.orientation.w,
@@ -97,6 +95,8 @@ void SlamNode::odom_callback(const nav_msgs::msg::Odometry::SharedPtr msg) {
         corrected_msg.pose.pose.orientation.y,
         corrected_msg.pose.pose.orientation.z
     );
+    q = q * q1;
+    
     q.normalize();
 
     corrected_msg.pose.pose.orientation = tf2::toMsg(q);

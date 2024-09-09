@@ -15,7 +15,7 @@ def generate_launch_description():
         {
             'frame_id':'camera_link',
             'approx_sync':True,
-            'publish_tf' : True
+            'publish_tf' : False
         },
         {
             'subscribe_depth': True,  # Subscribing to depth data for RGB-D SLAM
@@ -102,13 +102,21 @@ def generate_launch_description():
                 ('/depth/image', '/depth_image'),
                 # ('/odom', '/rgbd_odometry/odom')  # Remap odometry output from rgbd_odometry node
             ]
-        )
+        ),
 
-        # Node(
-        #     package='tf2_ros',
-        #     executable='static_transform_publisher',
-        #     name='map_to_odom_publisher',
-        #     arguments=['0', '0', '0', '0', '0', '0' , 'odom', 'base_link'],
-        #     output='screen'
-        # )
+        Node(
+            package='tf2_ros',
+            executable='static_transform_publisher',
+            name='base_to_odom_publisher',
+            arguments=['0', '0', '0', '0', '0', '0' , 'odom', 'base_link'],
+            output='screen'
+        ),
+
+        Node(
+            package='tf2_ros',
+            executable='static_transform_publisher',
+            name='map_to_odom_publisher',
+            arguments=['0', '0', '0', '3.14', '0', '-1.57' , 'odom', 'map'],
+            output='screen'
+        )
     ])
