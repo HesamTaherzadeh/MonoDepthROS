@@ -1,0 +1,12 @@
+[0.008s] Invoking command in '/home/hesam/Desktop/playground/depth_node/src/build/depth_inference': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/hesam/ros2_ws/install/robot_localization_gazebo:/home/hesam/ros2_ws/install/kitti2rosbag2:/opt/ros/humble /usr/bin/cmake --build /home/hesam/Desktop/playground/depth_node/src/build/depth_inference -- -j20 -l20
+[0.044s] [35m[1mConsolidate compiler generated dependencies of target slam_node[0m
+[0.064s] [ 33%] [32mBuilding CXX object CMakeFiles/slam_node.dir/src/depth_node.cpp.o[0m
+[0.285s] In file included from [01m[K/home/hesam/Desktop/playground/depth_node/src/depth_inference/include/depth_node.hpp:13[m[K,
+[0.285s]                  from [01m[K/home/hesam/Desktop/playground/depth_node/src/depth_inference/src/depth_node.cpp:1[m[K:
+[0.285s] [01m[K/opt/ros/humble/include/tf2_geometry_msgs/tf2_geometry_msgs/tf2_geometry_msgs.h:35:2:[m[K [01;35m[Kwarning: [m[K#warning This header is obsolete, please include tf2_geometry_msgs/tf2_geometry_msgs.hpp instead [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wcpp-Wcpp]8;;[m[K]
+[0.285s]    35 | #[01;35m[Kwarning[m[K This header is obsolete, please include tf2_geometry_msgs/tf2_geometry_msgs.hpp instead
+[0.285s]       |  [01;35m[K^~~~~~~[m[K
+[12.802s] gmake[2]: *** [CMakeFiles/slam_node.dir/build.make:76: CMakeFiles/slam_node.dir/src/depth_node.cpp.o] Interrupt
+[12.802s] gmake[1]: *** [CMakeFiles/Makefile2:137: CMakeFiles/slam_node.dir/all] Interrupt
+[12.802s] gmake: *** [Makefile:146: all] Interrupt
+[12.894s] Invoked command in '/home/hesam/Desktop/playground/depth_node/src/build/depth_inference' returned '-2': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/hesam/ros2_ws/install/robot_localization_gazebo:/home/hesam/ros2_ws/install/kitti2rosbag2:/opt/ros/humble /usr/bin/cmake --build /home/hesam/Desktop/playground/depth_node/src/build/depth_inference -- -j20 -l20

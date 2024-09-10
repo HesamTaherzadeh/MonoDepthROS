@@ -64,8 +64,12 @@ install(DIRECTORY launch/
   DESTINATION share/${PROJECT_NAME}/launch
 )
 
-install(DIRECTORY urdf
-  DESTINATION share/${PROJECT_NAME}
+install(DIRECTORY urdf/
+  DESTINATION share/${PROJECT_NAME}/urdf
+)
+
+install(DIRECTORY cfg/
+  DESTINATION share/${PROJECT_NAME}/cfg
 )
 
 ament_package()

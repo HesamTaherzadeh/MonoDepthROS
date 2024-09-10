@@ -4,11 +4,20 @@ SlamNode::SlamNode() : Node("slam_node")
 , cloud(std::make_shared<pcl::PointCloud<pcl::PointXYZRGB>>()){
     /**
     !TODO : 
-        - create a config file
         - Resolve the issue about odometry failure 
-
      */
-    model_runner_ = std::make_shared<ModelRunner>("/home/hesam/Desktop/playground/depth_node/src/unidepthv2_vits14_simp.onnx", 644, 364);
+
+    this->declare_parameter ("image_width", 196);  
+    this->declare_parameter("image_height", 616); 
+
+    // Retrieve parameters
+    int width = this->get_parameter("image_width").as_int();
+    int height = this->get_parameter("image_height").as_int();
+
+    // Log the parameter values
+    RCLCPP_INFO(this->get_logger(), "Width : %d", width);
+    RCLCPP_INFO(this->get_logger(), "Height : %d", height);
+    model_runner_ = std::make_shared<ModelRunner>("/home/hesam/Desktop/playground/depth_node/src/new.onnx", width, height);
 
     depth_image_publisher_ = this->create_publisher<sensor_msgs::msg::Image>("depth_image", 100);
     left_image_publisher_ = this->create_publisher<sensor_msgs::msg::Image>("/left", 100);

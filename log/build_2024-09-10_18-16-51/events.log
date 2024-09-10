@@ -1,0 +1,147 @@
+[0.000000] (-) TimerEvent: {}
+[0.000609] (depth_inference) JobQueued: {'identifier': 'depth_inference', 'dependencies': OrderedDict()}
+[0.000648] (depth_inference) JobStarted: {'identifier': 'depth_inference'}
+[0.005583] (depth_inference) JobProgress: {'identifier': 'depth_inference', 'progress': 'cmake'}
+[0.006115] (depth_inference) JobProgress: {'identifier': 'depth_inference', 'progress': 'build'}
+[0.006629] (depth_inference) Command: {'cmd': ['/usr/bin/cmake', '--build', '/home/hesam/Desktop/playground/depth_node/src/build/depth_inference', '--', '-j20', '-l20'], 'cwd': '/home/hesam/Desktop/playground/depth_node/src/build/depth_inference', 'env': OrderedDict([('LESSOPEN', '| /usr/bin/lesspipe %s'), ('USER', 'hesam'), ('LC_TIME', 'az_IR'), ('XDG_SESSION_TYPE', 'x11'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/usr/local/cuda-11.8/lib64:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib::/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:'), ('HOME', '/home/hesam'), ('CONDA_SHLVL', '0'), ('OLDPWD', '/home/hesam/Desktop/playground/depth_node'), ('DESKTOP_SESSION', 'ubuntu'), ('GAZEBO_MASTER_URI', 'http://localhost:11345'), ('ROS_PYTHON_VERSION', '3'), ('GNOME_SHELL_SESSION_MODE', 'ubuntu'), ('GTK_MODULES', 'gail:atk-bridge'), ('LC_MONETARY', 'az_IR'), ('DBUS_STARTER_BUS_TYPE', 'session'), ('SYSTEMD_EXEC_PID', '1873'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/1000/bus,guid=c1b01b068b1d1689f5b9086e66e00390'), ('COLORTERM', 'truecolor'), ('_CE_M', ''), ('IM_CONFIG_PHASE', '1'), ('COLCON_PREFIX_PATH', '/home/hesam/Desktop/playground/depth_node/src/install:/home/hesam/ros2_ws/install'), ('ROS_DISTRO', 'humble'), ('GTK_IM_MODULE', 'ibus'), ('LOGNAME', 'hesam'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('XDG_SESSION_CLASS', 'user'), ('USERNAME', 'hesam'), ('TERM', 'xterm-256color'), ('GAZEBO_MODEL_PATH', '/usr/share/gazebo-11/models:'), ('GNOME_DESKTOP_SESSION_ID', 'this-is-deprecated'), ('_CE_CONDA', ''), ('ROS_LOCALHOST_ONLY', '0'), ('WINDOWPATH', '2'), ('OGRE_RESOURCE_PATH', '/usr/lib/x86_64-linux-gnu/OGRE-1.9.0'), ('PATH', '/home/hesam/miniconda3/condabin:/usr/local/cuda-11.8/bin:/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin'), ('SESSION_MANAGER', 'local/hesam-ASUS-TUF-Gaming-F17-FX707ZU4-FX707ZU4:@/tmp/.ICE-unix/1873,unix/hesam-ASUS-TUF-Gaming-F17-FX707ZU4-FX707ZU4:/tmp/.ICE-unix/1873'), ('XDG_MENU_PREFIX', 'gnome-'), ('LC_ADDRESS', 'az_IR'), ('GNOME_TERMINAL_SCREEN', '/org/gnome/Terminal/screen/27f4ac17_4fa1_4930_b1b9_9b8737ce6dd6'), ('XDG_RUNTIME_DIR', '/run/user/1000'), ('DISPLAY', ':0'), ('LANG', 'en_US.UTF-8'), ('XDG_CURRENT_DESKTOP', 'ubuntu:GNOME'), ('LC_TELEPHONE', 'az_IR'), ('RMW_IMPLEMENTATION', 'rmw_cyclonedds_cpp'), ('XMODIFIERS', '@im=ibus'), ('XDG_SESSION_DESKTOP', 'ubuntu'), ('XAUTHORITY', '/run/user/1000/gdm/Xauthority'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('GNOME_TERMINAL_SERVICE', ':1.631'), ('SSH_AGENT_LAUNCHER', 'gnome-keyring'), ('SSH_AUTH_SOCK', '/run/user/1000/keyring/ssh'), ('AMENT_PREFIX_PATH', '/home/hesam/Desktop/playground/depth_node/src/install/depth_inference:/home/hesam/ros2_ws/install/robot_localization_gazebo:/home/hesam/ros2_ws/install/kitti2rosbag2:/opt/ros/humble'), ('CONDA_PYTHON_EXE', '/home/hesam/miniconda3/bin/python'), ('SHELL', '/bin/bash'), ('LC_NAME', 'az_IR'), ('QT_ACCESSIBILITY', '1'), ('GDMSESSION', 'ubuntu'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('LC_MEASUREMENT', 'az_IR'), ('GPG_AGENT_INFO', '/run/user/1000/gnupg/S.gpg-agent:0:1'), ('GAZEBO_RESOURCE_PATH', '/usr/share/gazebo-11:'), ('LC_IDENTIFICATION', 'az_IR'), ('GAZEBO_MODEL_DATABASE_URI', 'http://models.gazebosim.org'), ('QT_IM_MODULE', 'ibus'), ('PWD', '/home/hesam/Desktop/playground/depth_node/src/build/depth_inference'), ('TURTLEBOT3_MODEL', 'waffle'), ('LC_ALL', 'en_US.UTF-8'), ('XDG_CONFIG_DIRS', '/etc/xdg/xdg-ubuntu:/etc/xdg'), ('CONDA_EXE', '/home/hesam/miniconda3/bin/conda'), ('GAZEBO_PLUGIN_PATH', '/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:'), ('DBUS_STARTER_ADDRESS', 'unix:path=/run/user/1000/bus,guid=c1b01b068b1d1689f5b9086e66e00390'), ('XDG_DATA_DIRS', '/usr/share/ubuntu:/usr/share/gnome:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop'), ('PYTHONPATH', '/home/hesam/ros2_ws/install/robot_localization_gazebo/lib/python3.10/site-packages:/home/hesam/ros2_ws/build/kitti2rosbag2:/home/hesam/ros2_ws/install/kitti2rosbag2/lib/python3.10/site-packages:/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages'), ('LC_NUMERIC', 'az_IR'), ('LC_PAPER', 'az_IR'), ('COLCON', '1'), ('VTE_VERSION', '6800'), ('CMAKE_PREFIX_PATH', '/home/hesam/Desktop/playground/depth_node/src/install/depth_inference:/home/hesam/ros2_ws/install/robot_localization_gazebo:/home/hesam/ros2_ws/install/kitti2rosbag2:/opt/ros/humble')]), 'shell': False}
+[0.044481] (depth_inference) StdoutLine: {'line': b'\x1b[35m\x1b[1mConsolidate compiler generated dependencies of target slam_node\x1b[0m\n'}
+[0.064841] (depth_inference) StdoutLine: {'line': b'[ 33%] \x1b[32mBuilding CXX object CMakeFiles/slam_node.dir/src/depth_node.cpp.o\x1b[0m\n'}
+[0.100005] (-) TimerEvent: {}
+[0.200401] (-) TimerEvent: {}
+[0.285578] (depth_inference) StderrLine: {'line': b'In file included from \x1b[01m\x1b[K/home/hesam/Desktop/playground/depth_node/src/depth_inference/include/depth_node.hpp:13\x1b[m\x1b[K,\n'}
+[0.285760] (depth_inference) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/home/hesam/Desktop/playground/depth_node/src/depth_inference/src/depth_node.cpp:1\x1b[m\x1b[K:\n'}
+[0.285822] (depth_inference) StderrLine: {'line': b'\x1b[01m\x1b[K/opt/ros/humble/include/tf2_geometry_msgs/tf2_geometry_msgs/tf2_geometry_msgs.h:35:2:\x1b[m\x1b[K \x1b[01;35m\x1b[Kwarning: \x1b[m\x1b[K#warning This header is obsolete, please include tf2_geometry_msgs/tf2_geometry_msgs.hpp instead [\x1b[01;35m\x1b[K\x1b]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wcpp\x07-Wcpp\x1b]8;;\x07\x1b[m\x1b[K]\n'}
+[0.285881] (depth_inference) StderrLine: {'line': b'   35 | #\x1b[01;35m\x1b[Kwarning\x1b[m\x1b[K This header is obsolete, please include tf2_geometry_msgs/tf2_geometry_msgs.hpp instead\n'}
+[0.285936] (depth_inference) StderrLine: {'line': b'      |  \x1b[01;35m\x1b[K^~~~~~~\x1b[m\x1b[K\n'}
+[0.300634] (-) TimerEvent: {}
+[0.401056] (-) TimerEvent: {}
+[0.501534] (-) TimerEvent: {}
+[0.601781] (-) TimerEvent: {}
+[0.702050] (-) TimerEvent: {}
+[0.802346] (-) TimerEvent: {}
+[0.902623] (-) TimerEvent: {}
+[1.002908] (-) TimerEvent: {}
+[1.103176] (-) TimerEvent: {}
+[1.203438] (-) TimerEvent: {}
+[1.303724] (-) TimerEvent: {}
+[1.403993] (-) TimerEvent: {}
+[1.504390] (-) TimerEvent: {}
+[1.604765] (-) TimerEvent: {}
+[1.705130] (-) TimerEvent: {}
+[1.805500] (-) TimerEvent: {}
+[1.905789] (-) TimerEvent: {}
+[2.006134] (-) TimerEvent: {}
+[2.106389] (-) TimerEvent: {}
+[2.206708] (-) TimerEvent: {}
+[2.306982] (-) TimerEvent: {}
+[2.407283] (-) TimerEvent: {}
+[2.507573] (-) TimerEvent: {}
+[2.607840] (-) TimerEvent: {}
+[2.708164] (-) TimerEvent: {}
+[2.808493] (-) TimerEvent: {}
+[2.908792] (-) TimerEvent: {}
+[3.009180] (-) TimerEvent: {}
+[3.109460] (-) TimerEvent: {}
+[3.209864] (-) TimerEvent: {}
+[3.310273] (-) TimerEvent: {}
+[3.411115] (-) TimerEvent: {}
+[3.511608] (-) TimerEvent: {}
+[3.611998] (-) TimerEvent: {}
+[3.712279] (-) TimerEvent: {}
+[3.812541] (-) TimerEvent: {}
+[3.912905] (-) TimerEvent: {}
+[4.013255] (-) TimerEvent: {}
+[4.113502] (-) TimerEvent: {}
+[4.213831] (-) TimerEvent: {}
+[4.314184] (-) TimerEvent: {}
+[4.414439] (-) TimerEvent: {}
+[4.514753] (-) TimerEvent: {}
+[4.615091] (-) TimerEvent: {}
+[4.715529] (-) TimerEvent: {}
+[4.816202] (-) TimerEvent: {}
+[4.917086] (-) TimerEvent: {}
+[5.017533] (-) TimerEvent: {}
+[5.117890] (-) TimerEvent: {}
+[5.218312] (-) TimerEvent: {}
+[5.318588] (-) TimerEvent: {}
+[5.418964] (-) TimerEvent: {}
+[5.519334] (-) TimerEvent: {}
+[5.619761] (-) TimerEvent: {}
+[5.720082] (-) TimerEvent: {}
+[5.820409] (-) TimerEvent: {}
+[5.920705] (-) TimerEvent: {}
+[6.021019] (-) TimerEvent: {}
+[6.121316] (-) TimerEvent: {}
+[6.221578] (-) TimerEvent: {}
+[6.321894] (-) TimerEvent: {}
+[6.422284] (-) TimerEvent: {}
+[6.522549] (-) TimerEvent: {}
+[6.622897] (-) TimerEvent: {}
+[6.723160] (-) TimerEvent: {}
+[6.823505] (-) TimerEvent: {}
+[6.923806] (-) TimerEvent: {}
+[7.024169] (-) TimerEvent: {}
+[7.124483] (-) TimerEvent: {}
+[7.224741] (-) TimerEvent: {}
+[7.325038] (-) TimerEvent: {}
+[7.425440] (-) TimerEvent: {}
+[7.525774] (-) TimerEvent: {}
+[7.626090] (-) TimerEvent: {}
+[7.726490] (-) TimerEvent: {}
+[7.826779] (-) TimerEvent: {}
+[7.927108] (-) TimerEvent: {}
+[8.027445] (-) TimerEvent: {}
+[8.127807] (-) TimerEvent: {}
+[8.228103] (-) TimerEvent: {}
+[8.328486] (-) TimerEvent: {}
+[8.428905] (-) TimerEvent: {}
+[8.529288] (-) TimerEvent: {}
+[8.629695] (-) TimerEvent: {}
+[8.730018] (-) TimerEvent: {}
+[8.830354] (-) TimerEvent: {}
+[8.930580] (-) TimerEvent: {}
+[9.030906] (-) TimerEvent: {}
+[9.131232] (-) TimerEvent: {}
+[9.231471] (-) TimerEvent: {}
+[9.331800] (-) TimerEvent: {}
+[9.432036] (-) TimerEvent: {}
+[9.532393] (-) TimerEvent: {}
+[9.632749] (-) TimerEvent: {}
+[9.733087] (-) TimerEvent: {}
+[9.833530] (-) TimerEvent: {}
+[9.933898] (-) TimerEvent: {}
+[10.034124] (-) TimerEvent: {}
+[10.134443] (-) TimerEvent: {}
+[10.234667] (-) TimerEvent: {}
+[10.334990] (-) TimerEvent: {}
+[10.435247] (-) TimerEvent: {}
+[10.535626] (-) TimerEvent: {}
+[10.635880] (-) TimerEvent: {}
+[10.736270] (-) TimerEvent: {}
+[10.836532] (-) TimerEvent: {}
+[10.936860] (-) TimerEvent: {}
+[11.037247] (-) TimerEvent: {}
+[11.137478] (-) TimerEvent: {}
+[11.237742] (-) TimerEvent: {}
+[11.338020] (-) TimerEvent: {}
+[11.438350] (-) TimerEvent: {}
+[11.538572] (-) TimerEvent: {}
+[11.638917] (-) TimerEvent: {}
+[11.739207] (-) TimerEvent: {}
+[11.839461] (-) TimerEvent: {}
+[11.939686] (-) TimerEvent: {}
+[12.039944] (-) TimerEvent: {}
+[12.140270] (-) TimerEvent: {}
+[12.240502] (-) TimerEvent: {}
+[12.340751] (-) TimerEvent: {}
+[12.441124] (-) TimerEvent: {}
+[12.541477] (-) TimerEvent: {}
+[12.641736] (-) TimerEvent: {}
+[12.742011] (-) TimerEvent: {}
+[12.802154] (depth_inference) StderrLine: {'line': b'gmake[2]: *** [CMakeFiles/slam_node.dir/build.make:76: CMakeFiles/slam_node.dir/src/depth_node.cpp.o] Interrupt\n'}
+[12.802336] (depth_inference) StderrLine: {'line': b'gmake[1]: *** [CMakeFiles/Makefile2:137: CMakeFiles/slam_node.dir/all] Interrupt\n'}
+[12.802535] (depth_inference) StderrLine: {'line': b'gmake: *** [Makefile:146: all] Interrupt\n'}
+[12.842132] (-) TimerEvent: {}
+[12.893923] (depth_inference) CommandEnded: {'returncode': -2}
+[12.921141] (depth_inference) JobEnded: {'identifier': 'depth_inference', 'rc': 'SIGINT'}
+[12.931445] (-) EventReactorShutdown: {}

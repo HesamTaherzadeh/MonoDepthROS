@@ -1,0 +1,4 @@
+slam_node:
+  ros__parameters:
+    image_width: 616
+    image_height: 196
