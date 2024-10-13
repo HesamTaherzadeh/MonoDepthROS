@@ -4,7 +4,7 @@
   <joint name="odom_to_base" type="fixed">
     <parent link="odom"/>
     <child link="base_link"/>
-    <origin xyz="0 0 0" rpy="1.57 1.57 0"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
   </joint>
 
   <link name="base_link"/>
@@ -20,7 +20,7 @@
   <joint name="camera_to_left" type="fixed">
     <parent link="camera_link"/>
     <child link="left"/>
-    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <origin xyz="0 0 0" rpy="1.57 3.14 0"/>
   </joint>
 
   <link name="left"/>
@@ -28,7 +28,7 @@
   <joint name="camera_to_right" type="fixed">
     <parent link="camera_link"/>
     <child link="right"/>
-    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <origin xyz="0 0 0" rpy="1.57 3.14 0"/>
   </joint>
 
   <link name="right"/>

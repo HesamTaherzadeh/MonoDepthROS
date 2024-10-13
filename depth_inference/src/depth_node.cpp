@@ -9,22 +9,29 @@ SlamNode::SlamNode() : Node("slam_node")
 
     this->declare_parameter ("image_width", 196);  
     this->declare_parameter("image_height", 616); 
+    this->declare_parameter("image_topic", "/camera2/left/image_raw"); 
+    this->declare_parameter("onnx_model", "/home/hesam/Desktop/playground/depth_node/model/unidepthv2_vits14_simp.onnx"); 
+
 
     // Retrieve parameters
     int width = this->get_parameter("image_width").as_int();
     int height = this->get_parameter("image_height").as_int();
+    std::string onnx_model = this->get_parameter("onnx_model").as_string();
+    std::string image_topic = this->get_parameter("image_topic").as_string();
 
-    // Log the parameter values
     RCLCPP_INFO(this->get_logger(), "Width : %d", width);
     RCLCPP_INFO(this->get_logger(), "Height : %d", height);
-    model_runner_ = std::make_shared<ModelRunner>("/home/hesam/Desktop/playground/depth_node/src/new.onnx", width, height);
+    RCLCPP_INFO(this->get_logger(), "image topic : %s", image_topic.c_str());
+    RCLCPP_INFO(this->get_logger(), "ONNX path : %s", onnx_model.c_str());
+
+    model_runner_ = std::make_shared<ModelRunner>(onnx_model.c_str(), width, height);
 
     depth_image_publisher_ = this->create_publisher<sensor_msgs::msg::Image>("depth_image", 100);
-    left_image_publisher_ = this->create_publisher<sensor_msgs::msg::Image>("/left", 100);
-    camera_info_publisher_ = this->create_publisher<sensor_msgs::msg::CameraInfo>("/camera2/left/camera_info", 100);
+    left_image_publisher_ = this->create_publisher<sensor_msgs::msg::Image>("left", 100);
+    camera_info_publisher_ = this->create_publisher<sensor_msgs::msg::CameraInfo>("camera_info", 100);
 
     image_subscriber_ = this->create_subscription<sensor_msgs::msg::Image>(
-        "/camera2/left/image_raw", 100,
+        image_topic, 100,
         std::bind(&SlamNode::image_callback, this, std::placeholders::_1)
     );
 
@@ -83,13 +90,18 @@ void SlamNode::image_callback(const sensor_msgs::msg::Image::SharedPtr msg) {
 
     cv::Mat depth_image = model_runner_->runInference(input_image);
 
-    cv::Mat depth_converted;
-    depth_image.convertTo(depth_converted, CV_16UC1, 250);
+    // cv::Mat depth_converted;
+    // depth_image.convertTo(depth_converted, CV_8UC1, 1);
+
+    #ifdef OPENCV_IMSHOW
+        cv::imshow("depth", depth_image);
+        cv::waitKey(1);
+    #endif
 
     sensor_msgs::msg::Image::SharedPtr depth_msg = cv_bridge::CvImage(
         header, 
-        sensor_msgs::image_encodings::TYPE_16UC1, 
-        depth_converted
+        sensor_msgs::image_encodings::TYPE_32FC1, 
+        depth_image
     ).toImageMsg();
     depth_image_publisher_->publish(*depth_msg);
 

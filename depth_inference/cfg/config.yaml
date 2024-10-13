@@ -1,4 +1,10 @@
 slam_node:
   ros__parameters:
-    image_width: 616
-    image_height: 196
+    onnx_model : /home/hesam/Desktop/playground/depth_node/model/unidepthv2_vits14_simp.onnx
+    image_width: 644
+    image_height: 364
+    image_topic : "/camera2/left/image_raw"
+
+utils :
+  ros__parameters:
+    dataset : KITTI 

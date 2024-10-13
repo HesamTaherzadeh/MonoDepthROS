@@ -19,7 +19,7 @@ def generate_launch_description():
     # Define parameters for rtabmap_slam node
     parameters = [
         {
-            'frame_id': 'camera_link',
+            'frame_id': 'odom',
             'approx_sync': True,
             'publish_tf': False
         },
@@ -92,8 +92,9 @@ def generate_launch_description():
             remappings=[
                 ("rgb/image", "/left"),
                 ("depth/image", "/depth_image"),
-                ("rgb/camera_info", "/camera2/left/camera_info"),
-            ]        
+                ("rgb/camera_info", "camera_info"),
+            ],
+            output='screen'
         ),
 
         # RTAB-Map SLAM node
@@ -106,21 +107,33 @@ def generate_launch_description():
             remappings=remappings
         ),
 
-        # Static transform publisher: base to odom
-        Node(
-            package='tf2_ros',
-            executable='static_transform_publisher',
-            name='base_to_odom_publisher',
-            arguments=['0', '0', '0', '0', '0', '0', 'odom', 'base_link'],
-            output='screen'
-        ),
+        # # Static transform publisher: base to odom
+        # Node(
+        #     package='tf2_ros',
+        #     executable='static_transform_publisher',
+        #     name='base_to_odom_publisher',
+        #     arguments=['0', '0', '0', '0', '0', '0', 'odom', 'base_link'],
+        #     output='screen'
+        # ),
 
-        # Static transform publisher: map to odom
         Node(
             package='tf2_ros',
             executable='static_transform_publisher',
             name='map_to_odom_publisher',
-            arguments=['0', '0', '0', '3.14', '0', '-1.57', 'odom', 'map'],
+            arguments=['0', '0', '0', '0', '3.14', '0', 'map', 'odom'],
             output='screen'
+        ),
+
+
+        # Static transform publisher: map to odom
+        
+        # Static transform publisher: map to odom
+        Node(
+            package='depth_inference',
+            executable='utils_node',
+            name='utils_node',
+            output='screen',
+            parameters=[config_file_path] 
         )
+        
     ])

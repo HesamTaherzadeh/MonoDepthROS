@@ -3,8 +3,6 @@
 #include <vector>
 #include <opencv2/opencv.hpp>
 
-#define SIZE_DEBUG // Define the macro here or in your build system (e.g., in CMake)
-
 ModelRunner::ModelRunner(const char* modelPath, int imageWidth, int imageHeight) 
     : env_(ORT_LOGGING_LEVEL_WARNING, "DepthInference"), 
       session_(nullptr),  
@@ -78,10 +76,10 @@ cv::Mat ModelRunner::postprocessDepth(const cv::Mat& depth, int originalWidth, i
     double minVal, maxVal;
     cv::minMaxLoc(depth, &minVal, &maxVal);
     cv::Mat depthNormalized;
-    depth.convertTo(depthNormalized, CV_8UC1, 255.0 / (maxVal - minVal));
+    // depth.convertTo(depthNormalized, CV_8UC1, 255.0 / (maxVal - minVal));
 
     cv::Mat depthResized;
-    cv::resize(depthNormalized, depthResized, cv::Size(originalWidth, originalHeight));
+    cv::resize(depth, depthResized, cv::Size(originalWidth, originalHeight));
 
     #ifdef SIZE_DEBUG
     std::cout << "Size after resizing to original dimensions (depthResized): " << depthResized.size() << std::endl;

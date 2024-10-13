@@ -48,6 +48,13 @@ ament_target_dependencies(slam_node
   PCL
 )
 
+add_executable(utils_node src/utils.cpp)
+
+ament_target_dependencies(utils_node
+  rclcpp
+  sensor_msgs
+
+)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -59,6 +66,12 @@ endif()
 install(TARGETS slam_node
   DESTINATION lib/${PROJECT_NAME}
 )
+
+# Install target
+install(TARGETS utils_node
+  DESTINATION lib/${PROJECT_NAME}
+)
+
 
 install(DIRECTORY launch/
   DESTINATION share/${PROJECT_NAME}/launch
