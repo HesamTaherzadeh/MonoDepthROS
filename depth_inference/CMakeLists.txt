@@ -19,6 +19,7 @@ find_package(CUDA REQUIRED)
 find_library(CUDNN_LIBRARY cudnn HINTS /usr/lib/x86_64-linux-gnu /usr/local/cuda/lib64)
 find_package(tf2_geometry_msgs REQUIRED)
 find_package(PCL REQUIRED)
+find_package(yaets REQUIRED)
 
 # Manually find onnxruntime
 find_package(onnxruntime REQUIRED)
@@ -35,6 +36,7 @@ add_executable(slam_node src/depth_node.cpp src/model_reader.cpp)
 target_link_libraries(slam_node ${onnxruntime_LIBRARY} ${OpenCV_LIBS} ${CUDA_LIBRARIES} ${CUDNN_LIBRARY} ${PCL_LIBRARIES})
 
 ament_target_dependencies(slam_node
+  yaets
   tf2_ros
   rclcpp
   pcl_conversions

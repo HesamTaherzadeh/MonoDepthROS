@@ -39,7 +39,7 @@ private:
     rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr image_subscriber_;
     rclcpp::Subscription<sensor_msgs::msg::CameraInfo>::SharedPtr camera_info_subscriber_;  
     rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr car_base_odom_subscriber_;
-    rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr odom_subscriber_;
+    rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr odom_subscriber_, rtab_odom_subscriber_;
     rclcpp::Publisher<nav_msgs::msg::Odometry>::SharedPtr car_base_odom_publisher_;
     rclcpp::Publisher<nav_msgs::msg::Odometry>::SharedPtr odom_publisher_;
     std::shared_ptr<tf2_ros::TransformBroadcaster> tf_broadcaster_;

@@ -5,50 +5,47 @@ from ament_index_python.packages import get_package_share_directory
 import os
 
 def generate_launch_description():
-
-    # Get the shared directory path for the 'depth_inference' package
+    # Get shared directory for the 'depth_inference' package
     depth_inference_share_dir = get_package_share_directory('depth_inference')
 
-    # Get the URDF file path
+    # URDF file path
     urdf_file_path = os.path.join(depth_inference_share_dir, 'urdf', 'robot.urdf.xml')
-
-    # Load URDF file content
     with open(urdf_file_path, 'r') as urdf_file:
         robot_description = urdf_file.read()
 
-    # Define parameters for rtabmap_slam node
-    parameters = [
+    # Define RTAB-Map SLAM parameters
+    rtabmap_params = [
         {
             'frame_id': 'odom',
             'approx_sync': True,
             'publish_tf': False
         },
         {
-            'subscribe_depth': True,  # Subscribing to depth data for RGB-D SLAM
-            'subscribe_rgb': True,    # Subscribing to RGB data
-            'use_odometry': True,     # Use odometry information
-            'subscribe_scan': False,  # For RGB-D only, no LIDAR
+            'subscribe_depth': True,
+            'subscribe_rgb': True,
+            'subscribe_scan': False,
+            'Mem/ImagePreDecimation': '1',
+            'Mem/ImagePostDecimation': '1',
+            'Grid/DepthDecimation': '1',
+            'RGBD/NeighborLinkRefining': 'true',
+            'kf/MaxDepth': 10,
+            'kf/MinDepth': 0,
+            'RGBD/CreateOccupancyGrid': 'true'
         }
     ]
 
-    # Remap topics for RGB, depth, and camera info
-    remappings = [
-        ('/rgb/image', '/left'),
-        ('/rgb/camera_info', '/camera2/left/camera_info'),
-        ('/depth/image', '/depth_image')
-    ]
-
+    # Configuration file paths
     config_file_path = os.path.join(depth_inference_share_dir, 'cfg', 'config.yaml')
     rviz_file_path = os.path.join(depth_inference_share_dir, 'cfg', 'rviz.rviz')
 
     return LaunchDescription([
-        # SLAM node
+        # Depth inference SLAM node
         Node(
             package='depth_inference',
             executable='slam_node',
             name='slam_node',
             output='screen',
-            parameters=[config_file_path]  # Use the YAML config file
+            parameters=[config_file_path]
         ),
 
         # Robot state publisher node
@@ -65,7 +62,7 @@ def generate_launch_description():
             output='screen'
         ),
 
-        # Rviz2 process
+        # RViz process
         ExecuteProcess(
             cmd=['ros2', 'run', 'rviz2', 'rviz2', '-d', rviz_file_path],
             output='screen'
@@ -73,26 +70,25 @@ def generate_launch_description():
 
         # RGB-D odometry node
         Node(
-            package='rtabmap_odom', 
-            executable='rgbd_odometry', 
-            name="rgbd_odometry", 
+            package='rtabmap_odom',
+            executable='rgbd_odometry',
+            name='rgbd_odometry',
             arguments=['--ros-args', '--log-level', 'error'],
             parameters=[{
                 "frame_id": "base_link",
-                "odom_frame_id": "odom",
                 "publish_tf": True,
                 "wait_for_transform": 0.2,
                 "approx_sync": True,
                 "approx_sync_max_interval": 0.0,
-                "topic_queue_size": 100,
-                "sync_queue_size": 100,
+                "topic_queue_size": 100000000,
+                "sync_queue_size": 1000000000,
                 "qos": 1,
-                "subscribe_rgbd": False,
+                "subscribe_rgbd": False
             }],
             remappings=[
                 ("rgb/image", "/left"),
                 ("depth/image", "/depth_image"),
-                ("rgb/camera_info", "camera_info"),
+                ("rgb/camera_info", "camera_info")
             ],
             output='screen'
         ),
@@ -102,38 +98,31 @@ def generate_launch_description():
             package='rtabmap_slam',
             executable='rtabmap',
             name='rtabmap',
-            parameters=parameters,
-            arguments=['--ros-args', '--log-level', 'error'],
-            remappings=remappings
+            arguments=['-d'],
+            parameters=rtabmap_params,
+            output='screen',
+            remappings=[
+                ('/rgb/image', '/left'),
+                ('/rgb/camera_info', 'camera_info'),
+                ('/depth/image', '/depth_image')
+            ]
         ),
 
-        # # Static transform publisher: base to odom
-        # Node(
-        #     package='tf2_ros',
-        #     executable='static_transform_publisher',
-        #     name='base_to_odom_publisher',
-        #     arguments=['0', '0', '0', '0', '0', '0', 'odom', 'base_link'],
-        #     output='screen'
-        # ),
-
+        # Static transform publisher node (map to odom)
         Node(
             package='tf2_ros',
             executable='static_transform_publisher',
             name='map_to_odom_publisher',
-            arguments=['0', '0', '0', '0', '3.14', '0', 'map', 'odom'],
+            arguments=['0', '0', '0', '0', '0', '0', 'map', 'odom'],
             output='screen'
         ),
 
-
-        # Static transform publisher: map to odom
-        
-        # Static transform publisher: map to odom
+        # Depth inference utility node
         Node(
             package='depth_inference',
             executable='utils_node',
             name='utils_node',
             output='screen',
-            parameters=[config_file_path] 
+            parameters=[config_file_path]
         )
-        
     ])

@@ -6,9 +6,9 @@
 ModelRunner::ModelRunner(const char* modelPath, int imageWidth, int imageHeight) 
     : env_(ORT_LOGGING_LEVEL_WARNING, "DepthInference"), 
       session_(nullptr),  
-      allocator_(), 
-      imageHeight_(imageHeight), 
-      imageWidth_(imageWidth) {
+      allocator_(),  
+      imageWidth_(imageWidth),
+      imageHeight_(imageHeight) {
 
     // Create session options
     Ort::SessionOptions sessionOptions;
@@ -76,7 +76,7 @@ cv::Mat ModelRunner::postprocessDepth(const cv::Mat& depth, int originalWidth, i
     double minVal, maxVal;
     cv::minMaxLoc(depth, &minVal, &maxVal);
     cv::Mat depthNormalized;
-    // depth.convertTo(depthNormalized, CV_8UC1, 255.0 / (maxVal - minVal));
+    std::cout << "Depth Image Min: " << minVal << ", Max: " << maxVal << std::endl;
 
     cv::Mat depthResized;
     cv::resize(depth, depthResized, cv::Size(originalWidth, originalHeight));
@@ -100,7 +100,7 @@ cv::Mat ModelRunner::runInference(const cv::Mat& inputImage) {
     std::vector<float> inputData;
     inputData.assign((float*)preprocessedImage.datastart, (float*)preprocessedImage.dataend);
 
-    std::vector<int64_t> inputDims = {1, 3, imageHeight_, imageWidth_};  // Assuming batch size 1
+    std::vector<int64_t> inputDims = {1, 3, imageHeight_, imageWidth_};
     Ort::MemoryInfo memoryInfo = Ort::MemoryInfo::CreateCpu(OrtArenaAllocator, OrtMemTypeDefault);
     Ort::Value inputTensor = Ort::Value::CreateTensor<float>(
         memoryInfo, inputData.data(), inputData.size(), inputDims.data(), inputDims.size());

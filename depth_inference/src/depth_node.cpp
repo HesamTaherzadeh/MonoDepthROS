@@ -1,11 +1,13 @@
 #include "depth_node.hpp"
 
+#include "yaets/tracing.hpp"
+
+
+yaets::TraceSession session("session1.log");
+
+
 SlamNode::SlamNode() : Node("slam_node") 
 , cloud(std::make_shared<pcl::PointCloud<pcl::PointXYZRGB>>()){
-    /**
-    !TODO : 
-        - Resolve the issue about odometry failure 
-     */
 
     this->declare_parameter ("image_width", 196);  
     this->declare_parameter("image_height", 616); 
@@ -61,7 +63,6 @@ SlamNode::SlamNode() : Node("slam_node")
     car_base_odom_publisher_ = this->create_publisher<nav_msgs::msg::Odometry>("/car/base/odom_corrected", 10);
     odom_publisher_ = this->create_publisher<nav_msgs::msg::Odometry>("/odom_normalized", 10);
 
-    // std::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB>> cloud = std::make_shared<pcl::PointXYZRGB>();
 }
 
  SlamNode::~SlamNode() {
@@ -70,6 +71,7 @@ SlamNode::SlamNode() : Node("slam_node")
     };
 
 void SlamNode::image_callback(const sensor_msgs::msg::Image::SharedPtr msg) {
+    TRACE_EVENT(session);
     cv::Mat input_image = cv_bridge::toCvShare(msg)->image;
 
     if (input_image.empty()) {
@@ -90,13 +92,12 @@ void SlamNode::image_callback(const sensor_msgs::msg::Image::SharedPtr msg) {
 
     cv::Mat depth_image = model_runner_->runInference(input_image);
 
-    // cv::Mat depth_converted;
-    // depth_image.convertTo(depth_converted, CV_8UC1, 1);
-
     #ifdef OPENCV_IMSHOW
-        cv::imshow("depth", depth_image);
+        cv::imshow("depth", input_image);
         cv::waitKey(1);
     #endif
+
+    header.frame_id = "camera_link"; 
 
     sensor_msgs::msg::Image::SharedPtr depth_msg = cv_bridge::CvImage(
         header, 
@@ -124,6 +125,8 @@ void SlamNode::car_base_odom_callback(const nav_msgs::msg::Odometry::SharedPtr m
 }
 
 void SlamNode::odom_callback(const nav_msgs::msg::Odometry::SharedPtr msg) {
+    TRACE_EVENT(session);
+
     auto corrected_msg = *msg;
 
     tf2::Quaternion q1;
@@ -155,6 +158,8 @@ void SlamNode::map_cloud_callback(const sensor_msgs::msg::PointCloud2::SharedPtr
 }
 
 void SlamNode::save_cloud() {
+    TRACE_EVENT(session);
+
     if (cloud && !cloud->empty()) {
         pcl::io::savePCDFileASCII("/home/hesam/Desktop/pointcloud.pcd", *cloud);
         RCLCPP_INFO(this->get_logger(), "PointCloud saved to /home/hesam/Desktop/pointcloud.pcd.");
