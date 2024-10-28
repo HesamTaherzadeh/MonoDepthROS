@@ -1,10 +1,7 @@
 #include "depth_node.hpp"
-
 #include "yaets/tracing.hpp"
 
-
 yaets::TraceSession session("session1.log");
-
 
 SlamNode::SlamNode() : Node("slam_node") 
 , cloud(std::make_shared<pcl::PointCloud<pcl::PointXYZRGB>>()){
@@ -12,7 +9,8 @@ SlamNode::SlamNode() : Node("slam_node")
     this->declare_parameter ("image_width", 196);  
     this->declare_parameter("image_height", 616); 
     this->declare_parameter("image_topic", "/camera2/left/image_raw"); 
-    this->declare_parameter("onnx_model", "/home/hesam/Desktop/playground/depth_node/model/unidepthv2_vits14_simp.onnx"); 
+    this->declare_parameter("model", "depth_pro"); 
+    this->declare_parameter("onnx_model", "/home/hesam/Desktop/playground/depth_node/model/unidepthv2_vits14._big.onnx"); 
 
 
     // Retrieve parameters
@@ -20,13 +18,15 @@ SlamNode::SlamNode() : Node("slam_node")
     int height = this->get_parameter("image_height").as_int();
     std::string onnx_model = this->get_parameter("onnx_model").as_string();
     std::string image_topic = this->get_parameter("image_topic").as_string();
+    std::string model_name = this->get_parameter("model").as_string();
 
     RCLCPP_INFO(this->get_logger(), "Width : %d", width);
     RCLCPP_INFO(this->get_logger(), "Height : %d", height);
     RCLCPP_INFO(this->get_logger(), "image topic : %s", image_topic.c_str());
     RCLCPP_INFO(this->get_logger(), "ONNX path : %s", onnx_model.c_str());
+    RCLCPP_INFO(this->get_logger(), "Model : %s", model_name.c_str());
 
-    model_runner_ = std::make_shared<ModelRunner>(onnx_model.c_str(), width, height);
+    context = std::make_shared<Context>(modelTypeMap.at(model_name), onnx_model.c_str(), width, height);
 
     depth_image_publisher_ = this->create_publisher<sensor_msgs::msg::Image>("depth_image", 100);
     left_image_publisher_ = this->create_publisher<sensor_msgs::msg::Image>("left", 100);
@@ -36,7 +36,6 @@ SlamNode::SlamNode() : Node("slam_node")
         image_topic, 100,
         std::bind(&SlamNode::image_callback, this, std::placeholders::_1)
     );
-
 
     point_cloud_subscriber = this->create_subscription<sensor_msgs::msg::PointCloud2>(
         "/cloud_map", 100,
@@ -62,7 +61,6 @@ SlamNode::SlamNode() : Node("slam_node")
 
     car_base_odom_publisher_ = this->create_publisher<nav_msgs::msg::Odometry>("/car/base/odom_corrected", 10);
     odom_publisher_ = this->create_publisher<nav_msgs::msg::Odometry>("/odom_normalized", 10);
-
 }
 
  SlamNode::~SlamNode() {
@@ -81,6 +79,7 @@ void SlamNode::image_callback(const sensor_msgs::msg::Image::SharedPtr msg) {
 
     std_msgs::msg::Header header;
     header.stamp = this->now();
+    time =  header.stamp;
     header.frame_id = "left"; 
 
     sensor_msgs::msg::Image::SharedPtr left_msg = cv_bridge::CvImage(
@@ -90,10 +89,10 @@ void SlamNode::image_callback(const sensor_msgs::msg::Image::SharedPtr msg) {
     ).toImageMsg();
     left_image_publisher_->publish(*left_msg);
 
-    cv::Mat depth_image = model_runner_->runInference(input_image);
+    cv::Mat depth_image = context->runInference(input_image);
 
     #ifdef OPENCV_IMSHOW
-        cv::imshow("depth", input_image);
+        cv::imshow("depth", depth_image);
         cv::waitKey(1);
     #endif
 

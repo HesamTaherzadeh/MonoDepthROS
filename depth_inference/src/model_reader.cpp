@@ -2,13 +2,27 @@
 #include <iostream>
 #include <vector>
 #include <opencv2/opencv.hpp>
+#include <map>
 
-ModelRunner::ModelRunner(const char* modelPath, int imageWidth, int imageHeight) 
+
+const std::map<std::string, ModelConfig> ModelRunner::modelConfigs_ = {
+    {"unidepth", {{"image"}, {"depth"}, true}},
+    {"depth_pro", {{"pixel_values"}, {"predicted_depth", "focallength_px"}, false}},
+};
+
+ModelRunner::ModelRunner(const char* modelPath, int imageWidth, int imageHeight, const std::string& modelType) 
     : env_(ORT_LOGGING_LEVEL_WARNING, "DepthInference"), 
       session_(nullptr),  
       allocator_(),  
       imageWidth_(imageWidth),
       imageHeight_(imageHeight) {
+
+    // Get model configuration
+    auto it = modelConfigs_.find(modelType);
+    if (it == modelConfigs_.end()) {
+        throw std::runtime_error("Unsupported model type: " + modelType);
+    }
+    modelConfig_ = it->second;
 
     // Create session options
     Ort::SessionOptions sessionOptions;
@@ -69,6 +83,12 @@ cv::Mat ModelRunner::preprocessImage(const cv::Mat& inputImage) {
     std::cout << "Size after splitting and concatenation (chwImage): " << chwImage.size() << std::endl;
     #endif
 
+    if (modelConfig_.inputNames.size() > 0 && modelConfig_.inputNames[0] == "input") {
+        cv::Mat float16Image;
+        chwImage.convertTo(float16Image, CV_16F);
+        return float16Image;
+    }
+
     return chwImage;
 }
 
@@ -97,19 +117,20 @@ cv::Mat ModelRunner::runInference(const cv::Mat& inputImage) {
     #endif
 
     // Prepare the input data for the image
-    std::vector<float> inputData;
-    inputData.assign((float*)preprocessedImage.datastart, (float*)preprocessedImage.dataend);
+    std::vector<Ort::Float16_t> inputData;
+    inputData.assign((Ort::Float16_t*)preprocessedImage.datastart, (Ort::Float16_t*)preprocessedImage.dataend);
 
     std::vector<int64_t> inputDims = {1, 3, imageHeight_, imageWidth_};
     Ort::MemoryInfo memoryInfo = Ort::MemoryInfo::CreateCpu(OrtArenaAllocator, OrtMemTypeDefault);
-    Ort::Value inputTensor = Ort::Value::CreateTensor<float>(
-        memoryInfo, inputData.data(), inputData.size(), inputDims.data(), inputDims.size());
+    Ort::Value inputTensor = Ort::Value::CreateTensor<Ort::Float16_t>(
+        memoryInfo, inputData.data(), inputData.size() , inputDims.data(), inputDims.size());
 
-    const char* outputNames[] = {"depth"};
+    std::vector<Ort::Value> inputTensors;
+    inputTensors.push_back(std::move(inputTensor));
 
-    #ifdef INPUT_K
+    if (modelConfig_.useKMatrix) {
         cv::Mat kWithBatch;
-        K.reshape(1, 1).copyTo(kWithBatch);  
+        K.reshape(1, 1).copyTo(kWithBatch);
 
         std::vector<float> kData;
         kData.assign((float*)kWithBatch.datastart, (float*)kWithBatch.dataend);
@@ -118,23 +139,37 @@ cv::Mat ModelRunner::runInference(const cv::Mat& inputImage) {
         Ort::Value kTensor = Ort::Value::CreateTensor<float>(
             memoryInfo, kData.data(), kData.size(), kDims.data(), kDims.size());
 
-        const char* inputNames[] = {"image", "K"};
-        std::array<Ort::Value*, 2> inputTensors = {&inputTensor, &kTensor};
+        inputTensors.push_back(std::move(kTensor));
+    }
 
-        auto outputTensors = session_.Run(Ort::RunOptions{nullptr}, inputNames, 
-                                        *inputTensors.data(), 
-                                        2, outputNames, 1);
-    #else
-        const char* inputNames[] = {"image"};
-        std::array<Ort::Value*, 1> inputTensors = {&inputTensor};
+    // Convert input and output names to const char* arrays
+    std::vector<const char*> inputNames;
+    for (const auto& name : modelConfig_.inputNames) {
+        inputNames.push_back(name.c_str());
+    }
 
-        auto outputTensors = session_.Run(Ort::RunOptions{nullptr}, inputNames, 
-                                        *inputTensors.data(), 
-                                        inputTensors.size(), outputNames, 1);
-    #endif
+    std::vector<const char*> outputNames;
+    for (const auto& name : modelConfig_.outputNames) {
+        outputNames.push_back(name.c_str());
+    }
+
+    // Run the inference
+    std::vector<Ort::Value> outputTensors = session_.Run(
+        Ort::RunOptions{nullptr}, 
+        inputNames.data(), 
+        inputTensors.data(), 
+        inputTensors.size(), 
+        outputNames.data(), 
+        outputNames.size());
 
     float* outputData = outputTensors.front().GetTensorMutableData<float>();
-    cv::Mat depthMat(imageHeight_, imageWidth_, CV_32FC1, outputData);
+
+    if (!outputData || outputTensors.front().GetTensorTypeAndShapeInfo().GetElementCount() == 0) {
+            std::cerr << "Error: Output data is empty after inference." << std::endl;
+            return cv::Mat();  // Return an empty Mat if no data is available
+        }    cv::Mat depthMat(imageHeight_, imageWidth_, CV_32FC1, outputData);
+
+
 
     #ifdef SIZE_DEBUG
     std::cout << "Size after inference (depthMat): " << depthMat.size() << std::endl;
@@ -144,4 +179,3 @@ cv::Mat ModelRunner::runInference(const cv::Mat& inputImage) {
 
     return depthResized;
 }
-

@@ -15,6 +15,13 @@
 #include <opencv2/opencv.hpp>
 #include <definitions.h>
 
+
+struct ModelConfig {
+    std::vector<std::string> inputNames;
+    std::vector<std::string> outputNames;
+    bool useKMatrix;
+};
+
 /**
  * @class ModelRunner
  * @brief A class to handle ONNX model inference and image preprocessing/postprocessing.
@@ -33,7 +40,7 @@ public:
      * @param imageWidth The width of the input image expected by the model.
      * @param imageHeight The height of the input image expected by the model.
      */
-    ModelRunner(const char* modelPath, int imageWidth, int imageHeight);
+    ModelRunner(const char* modelPath, int imageWidth, int imageHeight, const std::string& modelType);
 
     /**
      * @brief Destructor for ModelRunner.
@@ -81,6 +88,10 @@ private:
     int imageWidth_;  /**< The width of the input image expected by the model. */
     int imageHeight_; /**< The height of the input image expected by the model. */
     cv::Mat K;
+    std::string model;
+    static const std::map<std::string, ModelConfig> modelConfigs_;
+    ModelConfig modelConfig_;
+
     
 };
 

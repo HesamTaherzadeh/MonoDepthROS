@@ -17,7 +17,8 @@
 #include <pcl/io/pcd_io.h>
 #include <pcl_conversions/pcl_conversions.h>
 
-
+#include <models.hpp>
+#include <context.hpp>
 
 class SlamNode : public rclcpp::Node {
 public:
@@ -32,7 +33,8 @@ private:
     void car_base_odom_callback(const nav_msgs::msg::Odometry::SharedPtr msg);
     void odom_callback(const nav_msgs::msg::Odometry::SharedPtr msg);
     void map_cloud_callback(const sensor_msgs::msg::PointCloud2::SharedPtr msg);
-    std::shared_ptr<ModelRunner> model_runner_;
+
+    std::shared_ptr<Context> context;
     rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr depth_image_publisher_;
     rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr left_image_publisher_;  
     rclcpp::Publisher<sensor_msgs::msg::CameraInfo>::SharedPtr camera_info_publisher_;  

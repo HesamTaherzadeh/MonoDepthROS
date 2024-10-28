@@ -31,7 +31,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 include_directories(include ${OpenCV_INCLUDE_DIRS} ${CUDA_INCLUDE_DIRS})
 
 # Add executable
-add_executable(slam_node src/depth_node.cpp src/model_reader.cpp)
+add_executable(slam_node src/depth_node.cpp src/context.cpp src/models.cpp)
 
 target_link_libraries(slam_node ${onnxruntime_LIBRARY} ${OpenCV_LIBS} ${CUDA_LIBRARIES} ${CUDNN_LIBRARY} ${PCL_LIBRARIES})
 

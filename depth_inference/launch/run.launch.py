@@ -12,29 +12,7 @@ def generate_launch_description():
     urdf_file_path = os.path.join(depth_inference_share_dir, 'urdf', 'robot.urdf.xml')
     with open(urdf_file_path, 'r') as urdf_file:
         robot_description = urdf_file.read()
-
-    # Define RTAB-Map SLAM parameters
-    rtabmap_params = [
-        {
-            'frame_id': 'odom',
-            'approx_sync': True,
-            'publish_tf': False
-        },
-        {
-            'subscribe_depth': True,
-            'subscribe_rgb': True,
-            'subscribe_scan': False,
-            'Mem/ImagePreDecimation': '1',
-            'Mem/ImagePostDecimation': '1',
-            'Grid/DepthDecimation': '1',
-            'RGBD/NeighborLinkRefining': 'true',
-            'kf/MaxDepth': 10,
-            'kf/MinDepth': 0,
-            'RGBD/CreateOccupancyGrid': 'true'
-        }
-    ]
-
-    # Configuration file paths
+        
     config_file_path = os.path.join(depth_inference_share_dir, 'cfg', 'config.yaml')
     rviz_file_path = os.path.join(depth_inference_share_dir, 'cfg', 'rviz.rviz')
 
@@ -44,7 +22,7 @@ def generate_launch_description():
             package='depth_inference',
             executable='slam_node',
             name='slam_node',
-            output='screen',
+            output='log',
             parameters=[config_file_path]
         ),
 
@@ -52,20 +30,20 @@ def generate_launch_description():
         Node(
             package='robot_state_publisher',
             executable='robot_state_publisher',
-            output='screen',
+            output='log',
             parameters=[{'robot_description': robot_description}],
         ),
 
         # Rosbag play process
         ExecuteProcess(
             cmd=['ros2', 'bag', 'play', '/home/hesam/Desktop/datasets/kitti-odom/bag00.bag'],
-            output='screen'
+            output='log'
         ),
 
         # RViz process
         ExecuteProcess(
             cmd=['ros2', 'run', 'rviz2', 'rviz2', '-d', rviz_file_path],
-            output='screen'
+            output='log'
         ),
 
         # RGB-D odometry node
@@ -90,7 +68,7 @@ def generate_launch_description():
                 ("depth/image", "/depth_image"),
                 ("rgb/camera_info", "camera_info")
             ],
-            output='screen'
+            output='log'
         ),
 
         # RTAB-Map SLAM node
@@ -98,9 +76,23 @@ def generate_launch_description():
             package='rtabmap_slam',
             executable='rtabmap',
             name='rtabmap',
-            arguments=['-d'],
-            parameters=rtabmap_params,
+            arguments=['--delete_db_on_start', 'udebug'],
             output='screen',
+            parameters=[{
+                'Mem/ImagePreDecimation': '1',          # No pre-decimation on input images
+                'Mem/ImagePostDecimation': '1',         # No post-decimation on input images
+                'Grid/RangeMax': '0',                   # No max range cutoff, so max range of sensor is used
+                'Grid/RangeMin': '0.1',                 # Minimal range for grid mapping
+                'Grid/DepthDecimation': '1',            # No decimation on depth images
+                'Grid/CellSize': '0.02',                # Small cell size for high-resolution occupancy grid (2 cm)
+                'Grid/FromDepth': 'true',               # Use depth information for the occupancy grid
+                'RGBD/LinearUpdate': '0',               # Update the map even if the robot moved only a bit
+                'RGBD/AngularUpdate': '0',              # Update the map even if the robot rotated only a bit
+                'RGBD/ProximityPathMaxNeighbors': '0',  # Use all neighbors to create a dense map
+                'RGBD/NeighborLinkRefining': 'true',    # Refine links to neighbors for dense mapping
+                'Optimizer/GravitySigma': '0',          # Disable gravity constraint to allow more freedom in optimization
+                'RGBD/OptimizeFromGraphEnd': 'true',    # Optimize from the last pose to refine the map
+            }],
             remappings=[
                 ('/rgb/image', '/left'),
                 ('/rgb/camera_info', 'camera_info'),
@@ -114,7 +106,7 @@ def generate_launch_description():
             executable='static_transform_publisher',
             name='map_to_odom_publisher',
             arguments=['0', '0', '0', '0', '0', '0', 'map', 'odom'],
-            output='screen'
+            output='log'
         ),
 
         # Depth inference utility node
@@ -122,7 +114,7 @@ def generate_launch_description():
             package='depth_inference',
             executable='utils_node',
             name='utils_node',
-            output='screen',
+            output='log',
             parameters=[config_file_path]
-        )
+        ),
     ])
