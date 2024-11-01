@@ -1,11 +1,11 @@
 slam_node:
   ros__parameters:
-    onnx_model : /home/hesam/Desktop/playground/depth_node/model/depth pro/model_fp16.onnx
+    onnx_model : /home/hesam/Desktop/playground/depth_node/model/depth pro/model_q4f16.onnx
     image_width: 644
     image_height: 364
     image_topic : "/camera2/left/image_raw"
     model : depth_pro
-
+    
 utils :
   ros__parameters:
     dataset : KITTI 

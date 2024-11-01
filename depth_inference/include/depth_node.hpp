@@ -1,6 +1,5 @@
 #pragma once
 
-#include "model_reader.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "sensor_msgs/msg/image.hpp"
 #include "sensor_msgs/image_encodings.hpp"

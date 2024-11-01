@@ -89,7 +89,12 @@ void SlamNode::image_callback(const sensor_msgs::msg::Image::SharedPtr msg) {
     ).toImageMsg();
     left_image_publisher_->publish(*left_msg);
 
+
     cv::Mat depth_image = context->runInference(input_image);
+    double minVal, maxVal;
+
+    cv::minMaxLoc(depth_image, &minVal, &maxVal);
+    std::cout << "Depth Image Min: " << minVal << ", Max: " << maxVal << std::endl;
 
     #ifdef OPENCV_IMSHOW
         cv::imshow("depth", depth_image);

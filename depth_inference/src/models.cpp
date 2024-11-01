@@ -95,9 +95,9 @@ cv::Mat DepthProModel::preprocess(const cv::Mat& inputImage) {
     std::cout << "Size after color conversion (imageRgb): " << imageRgb.size() << std::endl;
     #endif
 
-    imageRgb.convertTo(imageRgb, CV_32FC3, 1.0 / 255.0);
-    cv::Vec3f mean = cv::Vec3f(0.485, 0.456, 0.406);
-    cv::Vec3f stddev = cv::Vec3f(0.229, 0.224, 0.225);
+    imageRgb.convertTo(imageRgb, CV_32FC3, 1.0/255.0);
+    cv::Vec3f mean = cv::Vec3f(0, 0.5, 0.5);
+    cv::Vec3f stddev = cv::Vec3f(0.5, 0.5, 0.5);
     
     for (int i = 0; i < imageRgb.rows; ++i) {
         for (int j = 0; j < imageRgb.cols; ++j) {
@@ -136,18 +136,44 @@ cv::Mat DepthProModel::inference(const cv::Mat& preprocessedImage) {
     std::vector<int64_t> inputDims = {1, 3, imageHeight_, imageWidth_};
     Ort::MemoryInfo memoryInfo = Ort::MemoryInfo::CreateCpu(OrtArenaAllocator, OrtMemTypeDefault);
 
-    std::vector<float> inputData((Ort::Float16_t*)preprocessedImage.datastart, (Ort::Float16_t*)preprocessedImage.dataend);
+    // Convert input data to FP32, assuming FP16 input initially
+    std::vector<float> inputData(preprocessedImage.rows * preprocessedImage.cols * 3);
+    if (preprocessedImage.type() == CV_16F) {
+        cv::Mat preprocessedImageFP32;
+        preprocessedImage.convertTo(preprocessedImageFP32, CV_32F);  // Convert FP16 to FP32
+        inputData.assign((float*)preprocessedImageFP32.datastart, (float*)preprocessedImageFP32.dataend);
+    } else {
+        inputData.assign((float*)preprocessedImage.datastart, (float*)preprocessedImage.dataend);
+    }
+
     Ort::Value inputTensor = Ort::Value::CreateTensor<float>(
-            memoryInfo, inputData.data(), inputData.size(), inputDims.data(), inputDims.size());
+        memoryInfo, inputData.data(), inputData.size(), inputDims.data(), inputDims.size());
     std::array<Ort::Value*, 1> inputTensors = {&inputTensor};
 
-    const char* outputNames[] = {"predicted_depth"};
-
+    const char* outputNames[] = {"predicted_depth", "focallength_px"};
     auto outputTensors = session_.Run(Ort::RunOptions{nullptr}, inputNames, 
                                         *inputTensors.data(), 
-                                        inputTensors.size(), outputNames, 1);
+                                        inputTensors.size(), outputNames, 2);
 
-    float* outputData = outputTensors.front().GetTensorMutableData<float>();
-    cv::Mat depthMat(imageHeight_, imageWidth_, CV_32FC1, outputData);
-    return depthMat.clone(); 
+    // Process inverse depth
+    cv::Mat depthMat;
+    Ort::Value& depthTensor = outputTensors[0];
+    if (depthTensor.GetTensorTypeAndShapeInfo().GetElementType() == ONNX_TENSOR_ELEMENT_DATA_TYPE_FLOAT16) {
+        // Convert FP16 output to FP32
+        std::vector<Ort::Float16_t> outputDataFP16(depthTensor.GetTensorMutableData<Ort::Float16_t>(),
+                                                   depthTensor.GetTensorMutableData<Ort::Float16_t>() + 
+                                                   depthTensor.GetTensorTypeAndShapeInfo().GetElementCount());
+        std::vector<float> outputDataFP32(outputDataFP16.size());
+
+        depthMat = cv::Mat(imageHeight_, imageWidth_, CV_32FC1, outputDataFP16.data());
+    } else {
+        float* outputData = depthTensor.GetTensorMutableData<float>();
+        depthMat = cv::Mat(imageHeight_, imageWidth_, CV_32FC1, outputData);
+    }
+
+    // Process focal length output
+    Ort::Value& focalLengthTensor = outputTensors[1];
+    float focalLengthPx = *focalLengthTensor.GetTensorMutableData<float>();
+
+    return depthMat; 
 }

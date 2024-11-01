@@ -166,7 +166,7 @@ cv::Mat ModelRunner::runInference(const cv::Mat& inputImage) {
 
     if (!outputData || outputTensors.front().GetTensorTypeAndShapeInfo().GetElementCount() == 0) {
             std::cerr << "Error: Output data is empty after inference." << std::endl;
-            return cv::Mat();  // Return an empty Mat if no data is available
+            return cv::Mat();   
         }    cv::Mat depthMat(imageHeight_, imageWidth_, CV_32FC1, outputData);
 
 
