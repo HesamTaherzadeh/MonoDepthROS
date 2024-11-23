@@ -33,12 +33,21 @@ def generate_launch_description():
             output='log',
             parameters=[{'robot_description': robot_description}],
         ),
+        
+        # Node(
+        #     package='depth_inference',
+        #     executable='optimizer_node',
+        #     name='optimizer_node',
+        #     output='screen',
+        #     parameters=[config_file_path]
+        # ),
 
         # Rosbag play process
         ExecuteProcess(
-            cmd=['ros2', 'bag', 'play', '/home/hesam/Desktop/datasets/kitti-odom/bag00.bag'],
+            cmd=['ros2', 'bag', 'play', '/home/hesam/Desktop/datasets/kitti_raw/kitti_2011_10_03_drive_0027_synced'],
             output='log'
         ),
+
 
         # RViz process
         ExecuteProcess(
@@ -48,13 +57,12 @@ def generate_launch_description():
 
         # RGB-D odometry node, delayed by 10 seconds
         TimerAction(
-            period=30.0,
+            period=0.0,
             actions=[
                 Node(
                     package='rtabmap_odom',
                     executable='rgbd_odometry',
                     name='rgbd_odometry',
-                    arguments=['--ros-args', '--log-level', 'error'],
                     parameters=[{
                         "frame_id": "base_link",
                         "publish_tf": True,
@@ -69,7 +77,6 @@ def generate_launch_description():
                     remappings=[
                         ("rgb/image", "/left"),
                         ("depth/image", "/depth_image"),
-                        ("rgb/camera_info", "camera_info")
                     ],
                     output='screen'
                 ),
@@ -78,14 +85,13 @@ def generate_launch_description():
 
         # RTAB-Map SLAM node, delayed by 10 seconds
         TimerAction(
-            period=30.0,
+            period=0.0,
             actions=[
                 Node(
                     package='rtabmap_slam',
                     executable='rtabmap',
                     name='rtabmap',
                     arguments=['--delete_db_on_start', 'udebug'],
-                    output='screen',
                     parameters=[{
                         'Mem/ImagePreDecimation': '1',          # No pre-decimation on input images
                         'Mem/ImagePostDecimation': '1',         # No post-decimation on input images
@@ -98,13 +104,14 @@ def generate_launch_description():
                         'RGBD/AngularUpdate': '0',              # Update the map even if the robot rotated only a bit
                         'RGBD/ProximityPathMaxNeighbors': '0',  # Use all neighbors to create a dense map
                         'RGBD/NeighborLinkRefining': 'true',    # Refine links to neighbors for dense mapping
-                        'Optimizer/GravitySigma': '0',          # Disable gravity constraint to allow more freedom in optimization
+                        'RGBD/OptimizeStrategy': '2',  
+                        'RGBD/OptimizeRobust' : 'true',
                         'RGBD/OptimizeFromGraphEnd': 'true',    # Optimize from the last pose to refine the map
                     }],
                     remappings=[
                         ('/rgb/image', '/left'),
-                        ('/rgb/camera_info', 'camera_info'),
-                        ('/depth/image', '/depth_image')
+                        ('/depth/image', '/depth_image'),
+                        ('odom', 'optimized_odom')
                     ]
                 ),
             ]

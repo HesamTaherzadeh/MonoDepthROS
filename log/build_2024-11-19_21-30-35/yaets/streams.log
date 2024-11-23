@@ -1,0 +1,38 @@
+[0.009s] Invoking command in '/home/hesam/Desktop/playground/depth_node/src/build/yaets': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/hesam/ros2_ws/install/robot_localization_gazebo:/home/hesam/ros2_ws/install/kitti2rosbag2:/opt/ros/humble /usr/bin/cmake /home/hesam/Desktop/playground/depth_node/src/yaets -DCMAKE_INSTALL_PREFIX=/home/hesam/Desktop/playground/depth_node/src/install/yaets
+[0.078s] -- The C compiler identification is GNU 12.3.0
+[0.121s] -- The CXX compiler identification is GNU 12.3.0
+[0.129s] -- Detecting C compiler ABI info
+[0.190s] -- Detecting C compiler ABI info - done
+[0.197s] -- Check for working C compiler: /usr/bin/cc - skipped
+[0.198s] -- Detecting C compile features
+[0.198s] -- Detecting C compile features - done
+[0.201s] -- Detecting CXX compiler ABI info
+[0.270s] -- Detecting CXX compiler ABI info - done
+[0.275s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[0.275s] -- Detecting CXX compile features
+[0.275s] -- Detecting CXX compile features - done
+[0.280s] -- Found ament_cmake: 1.3.8 (/opt/ros/humble/share/ament_cmake/cmake)
+[0.389s] -- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter 
+[0.477s] -- Installing with ROS
+[0.478s] -- Found ament_lint_auto: 0.12.10 (/opt/ros/humble/share/ament_lint_auto/cmake)
+[0.557s] -- Added test 'copyright' to check source files copyright and LICENSE
+[0.563s] -- Added test 'cppcheck' to perform static code analysis on C / C++ code
+[0.563s] -- Configured cppcheck include dirs: /home/hesam/Desktop/playground/depth_node/src/yaets/include
+[0.563s] -- Configured cppcheck exclude dirs and/or files: 
+[0.568s] -- Added test 'cpplint' to check C / C++ code against the Google style
+[0.568s] -- Configured cpplint exclude dirs and/or files: 
+[0.569s] -- Added test 'flake8' to check Python code syntax and style conventions
+[0.570s] -- Added test 'lint_cmake' to check CMake code style
+[0.571s] -- Added test 'pep257' to check Python code against some of the docstring style conventions in PEP 257
+[0.576s] -- Added test 'uncrustify' to check C / C++ code style
+[0.576s] -- Configured uncrustify additional arguments: 
+[0.577s] -- Added test 'xmllint' to check XML markup files
+[0.578s] -- Configuring done
+[0.580s] -- Generating done
+[0.580s] -- Build files have been written to: /home/hesam/Desktop/playground/depth_node/src/build/yaets
+[0.584s] Invoked command in '/home/hesam/Desktop/playground/depth_node/src/build/yaets' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/hesam/ros2_ws/install/robot_localization_gazebo:/home/hesam/ros2_ws/install/kitti2rosbag2:/opt/ros/humble /usr/bin/cmake /home/hesam/Desktop/playground/depth_node/src/yaets -DCMAKE_INSTALL_PREFIX=/home/hesam/Desktop/playground/depth_node/src/install/yaets
+[0.585s] Invoking command in '/home/hesam/Desktop/playground/depth_node/src/build/yaets': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/hesam/ros2_ws/install/robot_localization_gazebo:/home/hesam/ros2_ws/install/kitti2rosbag2:/opt/ros/humble /usr/bin/cmake --build /home/hesam/Desktop/playground/depth_node/src/build/yaets -- -j20 -l20
+[0.620s] [ 50%] [32mBuilding CXX object CMakeFiles/yaets.dir/src/yaets/tracing.cpp.o[0m
+[1.037s] [100%] [32m[1mLinking CXX shared library libyaets.so[0m
+[1.114s] [100%] Built target yaets
+[1.128s] Invoked command in '/home/hesam/Desktop/playground/depth_node/src/build/yaets' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/hesam/ros2_ws/install/robot_localization_gazebo:/home/hesam/ros2_ws/install/kitti2rosbag2:/opt/ros/humble /usr/bin/cmake --build /home/hesam/Desktop/playground/depth_node/src/build/yaets -- -j20 -l20

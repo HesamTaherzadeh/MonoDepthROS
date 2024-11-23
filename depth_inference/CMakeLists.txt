@@ -5,6 +5,10 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
+# Specify C++ standard
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 # Find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
@@ -20,20 +24,38 @@ find_library(CUDNN_LIBRARY cudnn HINTS /usr/lib/x86_64-linux-gnu /usr/local/cuda
 find_package(tf2_geometry_msgs REQUIRED)
 find_package(PCL REQUIRED)
 find_package(yaets REQUIRED)
-
-# Manually find onnxruntime
 find_package(onnxruntime REQUIRED)
-# Specify C++ standard
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+find_package(GTSAM REQUIRED)
+find_package(Eigen3 REQUIRED)
+
 
 # Include directories
-include_directories(include ${OpenCV_INCLUDE_DIRS} ${CUDA_INCLUDE_DIRS})
+include_directories(
+  include
+  ${OpenCV_INCLUDE_DIRS}
+  ${CUDA_INCLUDE_DIRS}
+  ${GTSAM_INCLUDE_DIRS}
+)
 
-# Add executable
+# Add executables
 add_executable(slam_node src/depth_node.cpp src/context.cpp src/models.cpp)
+add_executable(utils_node src/utils.cpp)
+add_executable(optimizer_node  src/optimizer_node.cpp src/optimizer.cpp) 
 
-target_link_libraries(slam_node ${onnxruntime_LIBRARY} ${OpenCV_LIBS} ${CUDA_LIBRARIES} ${CUDNN_LIBRARY} ${PCL_LIBRARIES})
+target_link_libraries(slam_node
+  ${onnxruntime_LIBRARY}
+  ${OpenCV_LIBS}
+  ${CUDA_LIBRARIES}
+  ${CUDNN_LIBRARY}
+  ${PCL_LIBRARIES}
+)
+
+target_link_libraries(optimizer_node
+  ${GTSAM_LIBRARIES}
+  gtsam
+  ${OpenCV_LIBS}
+  ${PCL_LIBRARIES}
+)
 
 ament_target_dependencies(slam_node
   yaets
@@ -50,12 +72,21 @@ ament_target_dependencies(slam_node
   PCL
 )
 
-add_executable(utils_node src/utils.cpp)
-
 ament_target_dependencies(utils_node
   rclcpp
   sensor_msgs
+)
 
+# Specify dependencies for optimizer_node
+ament_target_dependencies(optimizer_node
+  rclcpp
+  nav_msgs
+  sensor_msgs
+  tf2_ros
+  tf2_geometry_msgs
+  GTSAM         
+  OpenCV
+  PCL
 )
 
 if(BUILD_TESTING)
@@ -64,16 +95,18 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 
-# Install target
+# Install targets
 install(TARGETS slam_node
   DESTINATION lib/${PROJECT_NAME}
 )
 
-# Install target
 install(TARGETS utils_node
   DESTINATION lib/${PROJECT_NAME}
 )
 
+install(TARGETS optimizer_node  # Install optimizer_node
+  DESTINATION lib/${PROJECT_NAME}
+)
 
 install(DIRECTORY launch/
   DESTINATION share/${PROJECT_NAME}/launch

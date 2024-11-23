@@ -30,7 +30,7 @@ SlamNode::SlamNode() : Node("slam_node")
 
     depth_image_publisher_ = this->create_publisher<sensor_msgs::msg::Image>("depth_image", 100);
     left_image_publisher_ = this->create_publisher<sensor_msgs::msg::Image>("left", 100);
-    camera_info_publisher_ = this->create_publisher<sensor_msgs::msg::CameraInfo>("camera_info", 100);
+    camera_info_publisher_ = this->create_publisher<sensor_msgs::msg::CameraInfo>("/rgb/camera_info", 100);
 
     image_subscriber_ = this->create_subscription<sensor_msgs::msg::Image>(
         image_topic, 100,
@@ -43,16 +43,16 @@ SlamNode::SlamNode() : Node("slam_node")
     );
 
     camera_info_subscriber_ = this->create_subscription<sensor_msgs::msg::CameraInfo>(
-        "/camera2/left/camera_info", 100,
+        "/kitti/camera_color_left/camera_info", 100,
         std::bind(&SlamNode::camera_info_callback, this, std::placeholders::_1)
     );
 
     tf_broadcaster_ = std::make_shared<tf2_ros::TransformBroadcaster>(this);
 
-    car_base_odom_subscriber_ = this->create_subscription<nav_msgs::msg::Odometry>(
-        "/car/base/odom", 10,
-        std::bind(&SlamNode::car_base_odom_callback, this, std::placeholders::_1)
-    );
+    // car_base_odom_subscriber_ = this->create_subscription<nav_msgs::msg::Odometry>(
+    //     "/groundtruth_pose", 10,
+    //     std::bind(&SlamNode::car_base_odom_callback, this, std::placeholders::_1)
+    // );
 
     odom_subscriber_ = this->create_subscription<nav_msgs::msg::Odometry>(
         "/odom", 10,
@@ -78,7 +78,7 @@ void SlamNode::image_callback(const sensor_msgs::msg::Image::SharedPtr msg) {
     }
 
     std_msgs::msg::Header header;
-    header.stamp = this->now();
+    header.stamp = msg->header.stamp;
     time =  header.stamp;
     header.frame_id = "left"; 
 
@@ -113,8 +113,12 @@ void SlamNode::image_callback(const sensor_msgs::msg::Image::SharedPtr msg) {
     if (last_camera_info_) {
         sensor_msgs::msg::CameraInfo camera_info_msg = *last_camera_info_;
         camera_info_msg.header.stamp = header.stamp;
+        camera_info_msg.header.frame_id = header.frame_id;
+        camera_info_msg.height = input_image.rows;
+        camera_info_msg.width = input_image.cols;
         camera_info_publisher_->publish(camera_info_msg);
     }
+    
 
 }
 
