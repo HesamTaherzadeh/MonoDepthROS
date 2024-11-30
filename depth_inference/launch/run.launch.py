@@ -17,6 +17,14 @@ def generate_launch_description():
     rviz_file_path = os.path.join(depth_inference_share_dir, 'cfg', 'rviz.rviz')
 
     return LaunchDescription([
+        Node(
+            package='depth_inference',
+            executable='optimizer_node',
+            name='optimizer_node',
+            output='screen',
+            parameters=[config_file_path]
+        ),
+        
         # Depth inference SLAM node
         Node(
             package='depth_inference',
@@ -34,14 +42,6 @@ def generate_launch_description():
             parameters=[{'robot_description': robot_description}],
         ),
         
-        # Node(
-        #     package='depth_inference',
-        #     executable='optimizer_node',
-        #     name='optimizer_node',
-        #     output='screen',
-        #     parameters=[config_file_path]
-        # ),
-
         # Rosbag play process
         ExecuteProcess(
             cmd=['ros2', 'bag', 'play', '/home/hesam/Desktop/datasets/kitti_raw/kitti_2011_10_03_drive_0027_synced'],
@@ -111,7 +111,7 @@ def generate_launch_description():
                     remappings=[
                         ('/rgb/image', '/left'),
                         ('/depth/image', '/depth_image'),
-                        ('odom', 'optimized_odom')
+                        ('/odom', 'optimized_odom')
                     ]
                 ),
             ]

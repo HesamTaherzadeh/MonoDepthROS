@@ -3,7 +3,7 @@
 PoseOptimizer::PoseOptimizer(): graph(),                                    
       initialEstimate(boost::make_shared<gtsam::Values>()),  
       vectorPoses(),                             
-      imuParams(gtsam::PreintegrationParams::MakeSharedU(0)) {
+      imuParams(gtsam::PreintegrationParams::MakeSharedD()) {
         imuBias = gtsam::imuBias::ConstantBias();
         isam = gtsam::ISAM2();
     }
@@ -61,9 +61,12 @@ void PoseOptimizer::performOptimizationLM(gtsam::Values& values) {
 }
 
 void PoseOptimizer::performOptimizationISAM(gtsam::Values& values) {
-    // Implement ISAM2 incremental optimization
     isam.update(graph, *initialEstimate);
     values = isam.calculateEstimate();
+    (*initialEstimate).clear();
+    graph.resize(0);          
+
+    std::cout << "Performed iSAM2 optimization and cleared the graph and initial values." << std::endl;
 }
 
 void PoseOptimizer::performOptimizationDogLeg(gtsam::Values& values) {

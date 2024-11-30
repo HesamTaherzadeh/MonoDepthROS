@@ -9,3 +9,11 @@ slam_node:
 utils_node :
   ros__parameters:
     dataset : KITTI 
+
+optimizer_node:
+  ros__parameters:
+    acc_std: 0.15
+    gyro_std: 0.02
+    integration_std: 0.001
+    optimization_interval_ms : 100
+    imu_topic : "/kitti/oxts/imu"
