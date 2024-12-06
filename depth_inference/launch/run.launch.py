@@ -111,7 +111,7 @@ def generate_launch_description():
                     remappings=[
                         ('/rgb/image', '/left'),
                         ('/depth/image', '/depth_image'),
-                        ('/odom', 'optimized_odom')
+                        # ('/odom', 'optimized_odom')
                     ]
                 ),
             ]

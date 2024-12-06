@@ -27,10 +27,13 @@ class PoseOptimizer {
     public:
         PoseOptimizer();
         PoseOptimizer(const std::vector<gtsam::Pose3>& vectorPoses);
+        
+        void clearGraph();
 
         // Add a prior factor on Pose3
         void addPriorPose3(const gtsam::Pose3& pose, gtsam::Key key, const gtsam::SharedNoiseModel& noiseModel);
-
+        
+        bool hasKey(gtsam::Key key) const;
         // Add a between factor on Pose3 using relative pose between initial estimates
         void addBetweenFactorsPose3(gtsam::Key key1, gtsam::Key key2, const gtsam::SharedNoiseModel& noiseModel);
 
@@ -58,7 +61,7 @@ class PoseOptimizer {
         void addToGraph(const gtsam::NonlinearFactor::shared_ptr& factor);
 
         void performOptimizationLM(gtsam::Values& values);
-        void performOptimizationISAM(gtsam::Values& values);
+        void performOptimizationISAM(gtsam::Values& values, bool clear);
         void performOptimizationDogLeg(gtsam::Values& values);
 
         boost::shared_ptr<gtsam::Values> getInitialEstimationObject();

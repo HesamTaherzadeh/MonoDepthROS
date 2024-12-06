@@ -16,6 +16,9 @@ void Context::setModel(ModelType modelType) {
         case ModelType::DEPTH_PRO:
             model_ = std::make_unique<DepthProModel>(modelPath_, imageWidth_, imageHeight_);
             break;
+        case ModelType::METRIC_3D:
+            model_ = std::make_unique<Metric3DModel>(modelPath_, imageWidth_, imageHeight_);
+            break;
         default:
             throw std::runtime_error("Unsupported model type.");
     }

@@ -3,17 +3,16 @@
 
 yaets::TraceSession session("session1.log");
 
-SlamNode::SlamNode() : Node("slam_node") 
-, cloud(std::make_shared<pcl::PointCloud<pcl::PointXYZRGB>>()){
 
-    this->declare_parameter ("image_width", 196);  
+SlamNode::SlamNode() : Node("slam_node"), cloud(std::make_shared<pcl::PointCloud<pcl::PointXYZRGB>>()) {
+
+    this->declare_parameter("image_width", 196);  
     this->declare_parameter("image_height", 616); 
     this->declare_parameter("image_topic", "/camera2/left/image_raw"); 
     this->declare_parameter("model", "depth_pro"); 
     this->declare_parameter("onnx_model", "/home/hesam/Desktop/playground/depth_node/model/unidepthv2_vits14._big.onnx"); 
 
-
-    // Retrieve parameters
+    index = 0;
     int width = this->get_parameter("image_width").as_int();
     int height = this->get_parameter("image_height").as_int();
     std::string onnx_model = this->get_parameter("onnx_model").as_string();
@@ -49,11 +48,6 @@ SlamNode::SlamNode() : Node("slam_node")
 
     tf_broadcaster_ = std::make_shared<tf2_ros::TransformBroadcaster>(this);
 
-    // car_base_odom_subscriber_ = this->create_subscription<nav_msgs::msg::Odometry>(
-    //     "/groundtruth_pose", 10,
-    //     std::bind(&SlamNode::car_base_odom_callback, this, std::placeholders::_1)
-    // );
-
     odom_subscriber_ = this->create_subscription<nav_msgs::msg::Odometry>(
         "/odom", 10,
         std::bind(&SlamNode::odom_callback, this, std::placeholders::_1)
@@ -63,10 +57,10 @@ SlamNode::SlamNode() : Node("slam_node")
     odom_publisher_ = this->create_publisher<nav_msgs::msg::Odometry>("/odom_normalized", 10);
 }
 
- SlamNode::~SlamNode() {
+SlamNode::~SlamNode() {
     RCLCPP_INFO(this->get_logger(), "SlamNode is shutting down, saving point cloud...");
     this->save_cloud();
-    };
+};
 
 void SlamNode::image_callback(const sensor_msgs::msg::Image::SharedPtr msg) {
     TRACE_EVENT(session);
@@ -89,37 +83,45 @@ void SlamNode::image_callback(const sensor_msgs::msg::Image::SharedPtr msg) {
     ).toImageMsg();
     left_image_publisher_->publish(*left_msg);
 
-
     cv::Mat depth_image = context->runInference(input_image);
-    double minVal, maxVal;
-
-    cv::minMaxLoc(depth_image, &minVal, &maxVal);
-    std::cout << "Depth Image Min: " << minVal << ", Max: " << maxVal << std::endl;
-
-    #ifdef OPENCV_IMSHOW
-        cv::imshow("depth", depth_image);
-        cv::waitKey(1);
-    #endif
-
-    header.frame_id = "camera_link"; 
-
-    sensor_msgs::msg::Image::SharedPtr depth_msg = cv_bridge::CvImage(
-        header, 
-        sensor_msgs::image_encodings::TYPE_32FC1, 
-        depth_image
-    ).toImageMsg();
-    depth_image_publisher_->publish(*depth_msg);
-
-    if (last_camera_info_) {
-        sensor_msgs::msg::CameraInfo camera_info_msg = *last_camera_info_;
-        camera_info_msg.header.stamp = header.stamp;
-        camera_info_msg.header.frame_id = header.frame_id;
-        camera_info_msg.height = input_image.rows;
-        camera_info_msg.width = input_image.cols;
-        camera_info_publisher_->publish(camera_info_msg);
-    }
     
+    // cv::imwrite("/home/hesam/Desktop/depth_eval/output/depth_" + std::to_string(index) + ".png" , depth_image);
+    // cv::imwrite("/home/hesam/Desktop/depth_eval/output/image_" + std::to_string(index) + ".png" , input_image);
+    ++index;
 
+    depth_buffer_.push_back(depth_image);
+    if (depth_buffer_.size() > 5) {
+        depth_buffer_.pop_front();
+    }
+
+    if (depth_buffer_.size() == 5) {
+        cv::Mat depth_sum = cv::Mat::zeros(depth_image.size(), CV_32FC1);
+        for (const auto &dimg : depth_buffer_) {
+            depth_sum += dimg;
+        }
+        cv::Mat depth_avg = depth_sum / static_cast<float>(depth_buffer_.size());
+        
+        double minVal, maxVal;
+        cv::minMaxLoc(depth_avg, &minVal, &maxVal);
+        std::cout << "Averaged Depth Image Min: " << minVal << ", Max: " << maxVal << std::endl;
+
+        header.frame_id = "camera_link"; 
+        sensor_msgs::msg::Image::SharedPtr depth_msg = cv_bridge::CvImage(
+            header, 
+            sensor_msgs::image_encodings::TYPE_32FC1, 
+            depth_avg
+        ).toImageMsg();
+        depth_image_publisher_->publish(*depth_msg);
+
+        if (last_camera_info_) {
+            sensor_msgs::msg::CameraInfo camera_info_msg = *last_camera_info_;
+            camera_info_msg.header.stamp = header.stamp;
+            camera_info_msg.header.frame_id = header.frame_id;
+            camera_info_msg.height = input_image.rows;
+            camera_info_msg.width = input_image.cols;
+            camera_info_publisher_->publish(camera_info_msg);
+        }
+    }
 }
 
 void SlamNode::camera_info_callback(const sensor_msgs::msg::CameraInfo::SharedPtr msg) {
@@ -153,6 +155,7 @@ void SlamNode::odom_callback(const nav_msgs::msg::Odometry::SharedPtr msg) {
     corrected_msg.pose.pose.orientation = tf2::toMsg(q);
     odom_publisher_->publish(corrected_msg);
 }
+
 void SlamNode::map_cloud_callback(const sensor_msgs::msg::PointCloud2::SharedPtr msg) {
     if (!cloud) {
         RCLCPP_ERROR(this->get_logger(), "Cloud is not initialized!");
@@ -160,8 +163,6 @@ void SlamNode::map_cloud_callback(const sensor_msgs::msg::PointCloud2::SharedPtr
     }
 
     pcl::fromROSMsg(*msg, *cloud);
-
-
     RCLCPP_INFO(this->get_logger(), "PointCloud received and added to cloud.");
 }
 

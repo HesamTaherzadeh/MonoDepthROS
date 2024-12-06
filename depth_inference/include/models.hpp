@@ -28,4 +28,15 @@ private:
     Ort::Session session_;
 };
 
+class Metric3DModel : public BaseModel {
+public:
+    Metric3DModel(const std::string& modelPath, int imageWidth, int imageHeight);
+
+    cv::Mat preprocess(const cv::Mat& inputImage) override;
+    cv::Mat inference(const cv::Mat& preprocessedImage) override;
+
+private:
+    Ort::Env env_;
+    Ort::Session session_;
+};
 #endif // UNIDEPTHMODEL_HPP

@@ -7,12 +7,14 @@
 
 enum class ModelType {
     UNIDEPTH,
-    DEPTH_PRO
+    DEPTH_PRO,
+    METRIC_3D
 };
 
 inline const std::map<std::string, ModelType> modelTypeMap = {
     {"unidepth", ModelType::UNIDEPTH},
-    {"depth_pro", ModelType::DEPTH_PRO}
+    {"depth_pro", ModelType::DEPTH_PRO},
+    {"metric3d", ModelType::METRIC_3D}
 };
 
 class Context {

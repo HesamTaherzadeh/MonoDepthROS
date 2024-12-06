@@ -5,12 +5,17 @@ PoseOptimizer::PoseOptimizer(): graph(),
       vectorPoses(),                             
       imuParams(gtsam::PreintegrationParams::MakeSharedD()) {
         imuBias = gtsam::imuBias::ConstantBias();
-        isam = gtsam::ISAM2();
+        gtsam::ISAM2Params params;
+        params.relinearizeThreshold = 0.01;
+        params.relinearizeSkip = 1;
+        isam = gtsam::ISAM2(params);
     }
 void PoseOptimizer::addPriorPose3(const gtsam::Pose3& pose, gtsam::Key key, const gtsam::SharedNoiseModel& noiseModel) {
     graph.emplace_shared<gtsam::PriorFactor<gtsam::Pose3>>(key, pose, noiseModel);
 }
-
+bool PoseOptimizer::hasKey(gtsam::Key key) const {
+    return initialEstimate->exists(key);
+}
 void PoseOptimizer::addBetweenFactorsPose3(gtsam::Key key1, gtsam::Key key2, const gtsam::SharedNoiseModel& noiseModel) {
     const gtsam::Pose3& pose1 = initialEstimate->at<gtsam::Pose3>(key1);
     const gtsam::Pose3& pose2 = initialEstimate->at<gtsam::Pose3>(key2);
@@ -60,17 +65,20 @@ void PoseOptimizer::performOptimizationLM(gtsam::Values& values) {
     values = optimizer.optimize();
 }
 
-void PoseOptimizer::performOptimizationISAM(gtsam::Values& values) {
+void PoseOptimizer::performOptimizationISAM(gtsam::Values& values, bool clear) {
     isam.update(graph, *initialEstimate);
     values = isam.calculateEstimate();
-    (*initialEstimate).clear();
-    graph.resize(0);          
+    if (clear) clearGraph();         
 
     std::cout << "Performed iSAM2 optimization and cleared the graph and initial values." << std::endl;
 }
 
+void PoseOptimizer::clearGraph(){
+    (*initialEstimate).clear();
+    graph.resize(0); 
+}
+
 void PoseOptimizer::performOptimizationDogLeg(gtsam::Values& values) {
-    // Implement Dogleg optimization
     gtsam::DoglegOptimizer optimizer(graph, *initialEstimate);
     values = optimizer.optimize();
 }

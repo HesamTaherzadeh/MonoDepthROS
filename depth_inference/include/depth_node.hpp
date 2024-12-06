@@ -45,11 +45,14 @@ private:
     rclcpp::Publisher<nav_msgs::msg::Odometry>::SharedPtr odom_publisher_;
     std::shared_ptr<tf2_ros::TransformBroadcaster> tf_broadcaster_;
     rclcpp::Subscription<sensor_msgs::msg::PointCloud2>::SharedPtr point_cloud_subscriber;
+    std::deque<cv::Mat> depth_buffer_;
 
     sensor_msgs::msg::CameraInfo::SharedPtr last_camera_info_;
     rclcpp::Time time;
 
     std::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB>> cloud;
+    
+    int index;
 
 };
 

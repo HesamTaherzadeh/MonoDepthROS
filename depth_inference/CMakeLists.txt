@@ -28,6 +28,11 @@ find_package(onnxruntime REQUIRED)
 find_package(GTSAM REQUIRED)
 find_package(Eigen3 REQUIRED)
 
+if(NOT onnxruntime_FOUND)
+  message(FATAL_ERROR "onnxruntime not found. Make sure it's installed and accessible.")
+else()
+  message(STATUS "onnxruntime found at: ${onnxruntime_DIR}")
+endif()
 
 # Include directories
 include_directories(
@@ -43,7 +48,7 @@ add_executable(utils_node src/utils.cpp)
 add_executable(optimizer_node  src/optimizer_node.cpp src/optimizer.cpp) 
 
 target_link_libraries(slam_node
-  ${onnxruntime_LIBRARY}
+  onnxruntime
   ${OpenCV_LIBS}
   ${CUDA_LIBRARIES}
   ${CUDNN_LIBRARY}
@@ -51,7 +56,6 @@ target_link_libraries(slam_node
 )
 
 target_link_libraries(optimizer_node
-  ${GTSAM_LIBRARIES}
   gtsam
   ${OpenCV_LIBS}
   ${PCL_LIBRARIES}

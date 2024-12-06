@@ -44,6 +44,7 @@ public:
         double integration_std = this->get_parameter("integration_std").as_double();
         int optim_interval_ms = this->get_parameter("optimization_interval_ms").as_int();
         std::string imu_topic = this->get_parameter("imu_topic").as_string();
+        
 
         RCLCPP_INFO(this->get_logger(), "acc_std : %f", acc_std);
         RCLCPP_INFO(this->get_logger(), "gyro_std : %f", gyro_std);
@@ -68,7 +69,7 @@ public:
         optimized_odom_pub_ = this->create_publisher<nav_msgs::msg::Odometry>("/optimized_odom", 10);
 
         timer_ = this->create_wall_timer(
-            std::chrono::milliseconds(100),
+            std::chrono::milliseconds(optim_interval_ms),
             std::bind(&OptimizerNode::optimize, this));
 
         OPTIM_NODE_DEBUG("Exited OptimizerNode constructor.");
@@ -215,7 +216,15 @@ private:
 
         gtsam::Values result;
 
-        pose_optimizer_->performOptimizationISAM(result);
+        try {
+            
+            pose_optimizer_->performOptimizationISAM(result, true);
+            OPTIM_NODE_DEBUG("Performed optimization.");
+        } catch (const gtsam::IndeterminantLinearSystemException& e) {
+            RCLCPP_ERROR(this->get_logger(), "GTSAM optimization failed: %s", e.what());
+            pose_optimizer_->clearGraph();
+            return;
+        }
         OPTIM_NODE_DEBUG("Performed optimization.");
 
         if (odom_counter_ > 0) {
@@ -275,6 +284,7 @@ private:
     std::shared_ptr<gtsam::PreintegratedImuMeasurements> preintegrated_imu_;
 
     std::shared_ptr<std::deque<sensor_msgs::msg::Imu>> imu_buffer_;
+    int count_to_clean;
 };
 
 int main(int argc, char* argv[]) {
