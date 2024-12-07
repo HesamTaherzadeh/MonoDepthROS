@@ -1,14 +1,14 @@
 slam_node:
   ros__parameters:
-    onnx_model : /home/hesam/Desktop/depth_node/model/metric3d/model.onnx
-    image_width: 664
-    image_height: 350
+    onnx_model : /home/hesam/Desktop/depth_node/model/unidepth/unidepthv2_vits14_simp.onnx
+    image_width: 644
+    image_height: 364
     image_topic : "/kitti/camera_color_left/image_raw"
-    model : metric3d
+    model : unidepth
     
 utils_node :
   ros__parameters:
-    dataset : metric3d 
+    dataset : KITTI 
 
 optimizer_node:
   ros__parameters:

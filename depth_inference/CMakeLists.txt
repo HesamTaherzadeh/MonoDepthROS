@@ -124,4 +124,9 @@ install(DIRECTORY cfg/
   DESTINATION share/${PROJECT_NAME}/cfg
 )
 
+install(
+  PROGRAMS
+  scripts/odometry.py
+  DESTINATION lib/${PROJECT_NAME}
+)
 ament_package()
