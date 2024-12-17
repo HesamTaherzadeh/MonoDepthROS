@@ -17,13 +17,13 @@ def generate_launch_description():
     rviz_file_path = os.path.join(depth_inference_share_dir, 'cfg', 'rviz.rviz')
 
     return LaunchDescription([
-        Node(
-            package='depth_inference',
-            executable='optimizer_node',
-            name='optimizer_node',
-            output='screen',
-            parameters=[config_file_path]
-        ),
+        # Node(
+        #     package='depth_inference',
+        #     executable='optimizer_node',
+        #     name='optimizer_node',
+        #     output='screen',
+        #     parameters=[config_file_path]
+        # ),
         
         # Depth inference SLAM node
         Node(
@@ -56,66 +56,66 @@ def generate_launch_description():
         ),
 
         # RGB-D odometry node, delayed by 10 seconds
-        TimerAction(
-            period=0.0,
-            actions=[
-                Node(
-                    package='rtabmap_odom',
-                    executable='rgbd_odometry',
-                    name='rgbd_odometry',
-                    parameters=[{
-                        "frame_id": "base_link",
-                        "publish_tf": True,
-                        "wait_for_transform": 10.0,
-                        "approx_sync": True,
-                        "approx_sync_max_interval": 0.0,
-                        "topic_queue_size": 10000,
-                        "sync_queue_size": 10000,
-                        "qos": 1,
-                        "subscribe_rgbd": False
-                    }],
-                    remappings=[
-                        ("rgb/image", "/left"),
-                        ("depth/image", "/depth_image"),
-                    ],
-                    output='screen'
-                ),
-            ]
-        ),
+        # TimerAction(
+        #     period=0.0,
+        #     actions=[
+        #         Node(
+        #             package='rtabmap_odom',
+        #             executable='rgbd_odometry',
+        #             name='rgbd_odometry',
+        #             parameters=[{
+        #                 "frame_id": "base_link",
+        #                 "publish_tf": True,
+        #                 "wait_for_transform": 10.0,
+        #                 "approx_sync": True,
+        #                 "approx_sync_max_interval": 0.0,
+        #                 "topic_queue_size": 10000,
+        #                 "sync_queue_size": 10000,
+        #                 "qos": 1,
+        #                 "subscribe_rgbd": False
+        #             }],
+        #             remappings=[
+        #                 ("rgb/image", "/left"),
+        #                 ("depth/image", "/depth_image"),
+        #             ],
+        #             output='screen'
+        #         ),
+        #     ]
+        # ),
 
-        # RTAB-Map SLAM node, delayed by 10 seconds
-        TimerAction(
-            period=0.0,
-            actions=[
-                Node(
-                    package='rtabmap_slam',
-                    executable='rtabmap',
-                    name='rtabmap',
-                    arguments=['--delete_db_on_start', 'udebug'],
-                    parameters=[{
-                        'Mem/ImagePreDecimation': '1',          # No pre-decimation on input images
-                        'Mem/ImagePostDecimation': '1',         # No post-decimation on input images
-                        'Grid/RangeMax': '0',                   # No max range cutoff, so max range of sensor is used
-                        'Grid/RangeMin': '0.1',                 # Minimal range for grid mapping
-                        'Grid/DepthDecimation': '1',            # No decimation on depth images
-                        'Grid/CellSize': '0.02',                # Small cell size for high-resolution occupancy grid (2 cm)
-                        'Grid/FromDepth': 'true',               # Use depth information for the occupancy grid
-                        'RGBD/LinearUpdate': '0',               # Update the map even if the robot moved only a bit
-                        'RGBD/AngularUpdate': '0',              # Update the map even if the robot rotated only a bit
-                        'RGBD/ProximityPathMaxNeighbors': '0',  # Use all neighbors to create a dense map
-                        'RGBD/NeighborLinkRefining': 'true',    # Refine links to neighbors for dense mapping
-                        'RGBD/OptimizeStrategy': '2',  
-                        'RGBD/OptimizeRobust' : 'true',
-                        'RGBD/OptimizeFromGraphEnd': 'true',    # Optimize from the last pose to refine the map
-                    }],
-                    remappings=[
-                        ('/rgb/image', '/left'),
-                        ('/depth/image', '/depth_image'),
-                        ('/odom', '/rgbd_odometry/pose')
-                    ]
-                ),
-            ]
-        ),
+        # # RTAB-Map SLAM node, delayed by 10 seconds
+        # TimerAction(
+        #     period=0.0,
+        #     actions=[
+        #         Node(
+        #             package='rtabmap_slam',
+        #             executable='rtabmap',
+        #             name='rtabmap',
+        #             arguments=['--delete_db_on_start', 'udebug'],
+        #             parameters=[{
+        #                 'Mem/ImagePreDecimation': '1',          # No pre-decimation on input images
+        #                 'Mem/ImagePostDecimation': '1',         # No post-decimation on input images
+        #                 'Grid/RangeMax': '0',                   # No max range cutoff, so max range of sensor is used
+        #                 'Grid/RangeMin': '0.1',                 # Minimal range for grid mapping
+        #                 'Grid/DepthDecimation': '1',            # No decimation on depth images
+        #                 'Grid/CellSize': '0.02',                # Small cell size for high-resolution occupancy grid (2 cm)
+        #                 'Grid/FromDepth': 'true',               # Use depth information for the occupancy grid
+        #                 'RGBD/LinearUpdate': '0',               # Update the map even if the robot moved only a bit
+        #                 'RGBD/AngularUpdate': '0',              # Update the map even if the robot rotated only a bit
+        #                 'RGBD/ProximityPathMaxNeighbors': '0',  # Use all neighbors to create a dense map
+        #                 'RGBD/NeighborLinkRefining': 'true',    # Refine links to neighbors for dense mapping
+        #                 'RGBD/OptimizeStrategy': '2',  
+        #                 'RGBD/OptimizeRobust' : 'true',
+        #                 'RGBD/OptimizeFromGraphEnd': 'true',    # Optimize from the last pose to refine the map
+        #             }],
+        #             remappings=[
+        #                 ('/rgb/image', '/left'),
+        #                 ('/depth/image', '/depth_image'),
+        #                 ('/odom', '/rgbd_odometry/pose')
+        #             ]
+        #         ),
+        #     ]
+        # ),
 
         # Static transform publisher node (map to odom)
         Node(

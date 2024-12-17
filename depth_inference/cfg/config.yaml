@@ -5,6 +5,7 @@ slam_node:
     image_height: 512
     image_topic : "/kitti/camera_color_left/image_raw"
     model : metric3d
+    params_folder_path : "/home/hesam/Desktop/Repos/Kimera-VIO/params"
     
 utils_node :
   ros__parameters:

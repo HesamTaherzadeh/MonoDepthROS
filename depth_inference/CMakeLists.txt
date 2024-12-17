@@ -26,7 +26,9 @@ find_package(PCL REQUIRED)
 find_package(yaets REQUIRED)
 find_package(onnxruntime REQUIRED)
 find_package(GTSAM REQUIRED)
+find_package(GTSAM_UNSTABLE REQUIRED)
 find_package(Eigen3 REQUIRED)
+find_package(glog REQUIRED)
 
 if(NOT onnxruntime_FOUND)
   message(FATAL_ERROR "onnxruntime not found. Make sure it's installed and accessible.")
@@ -42,6 +44,11 @@ include_directories(
   ${GTSAM_INCLUDE_DIRS}
 )
 
+################KIMERA
+include_directories(/home/hesam/Desktop/Repos/Kimera-VIO/include)
+link_directories(/home/hesam/Desktop/Repos/Kimera-VIO/build/lib)
+################
+
 # Add executables
 add_executable(slam_node src/depth_node.cpp src/context.cpp src/models.cpp)
 add_executable(utils_node src/utils.cpp)
@@ -53,6 +60,10 @@ target_link_libraries(slam_node
   ${CUDA_LIBRARIES}
   ${CUDNN_LIBRARY}
   ${PCL_LIBRARIES}
+  /home/hesam/Desktop/Repos/Kimera-VIO/build/libkimera_vio.so
+  glog
+  gtsam
+  gtsam_unstable
 )
 
 target_link_libraries(optimizer_node
