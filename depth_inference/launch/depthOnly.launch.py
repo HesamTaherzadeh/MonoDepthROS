@@ -26,16 +26,16 @@ def generate_launch_description():
         ),
 
         # Robot state publisher node
-        Node(
-            package='robot_state_publisher',
-            executable='robot_state_publisher',
-            output='log',
-            parameters=[{'robot_description': robot_description}],
-        ),
+        # Node(
+        #     package='robot_state_publisher',
+        #     executable='robot_state_publisher',
+        #     output='log',
+        #     parameters=[{'robot_description': robot_description}],
+        # ),
         
         # Rosbag play process
         ExecuteProcess(
-            cmd=['ros2', 'bag', 'play', '/home/hesam/Desktop/datasets/kitti_raw/kitti_2011_10_03_drive_0027_synced'],
+            cmd=['ros2', 'bag', 'play', '/home/hesam/Desktop/datasets/outputKITTIros2'],
             output='log'
         ),
         
@@ -49,7 +49,7 @@ def generate_launch_description():
             package='tf2_ros',
             executable='static_transform_publisher',
             name='map_to_odom_publisher',
-            arguments=['0', '0', '0', '0', '0', '0', 'map', 'odom'],
+            arguments=['0', '0', '0', '1.5708', '3.14159', '1.5708', 'map', 'odom'],
             output='log'
         ),
 

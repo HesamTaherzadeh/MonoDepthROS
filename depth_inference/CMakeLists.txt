@@ -15,6 +15,7 @@ find_package(rclcpp REQUIRED)
 find_package(pcl_conversions REQUIRED)
 find_package(tf2_ros REQUIRED)
 find_package(std_msgs REQUIRED)
+find_package(tf2_eigen REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)
 find_package(cv_bridge REQUIRED)
@@ -46,6 +47,8 @@ include_directories(
 add_executable(slam_node src/depth_node.cpp src/context.cpp src/models.cpp)
 add_executable(utils_node src/utils.cpp)
 add_executable(optimizer_node  src/optimizer_node.cpp src/optimizer.cpp) 
+add_executable(mapper_node src/mapper_node.cpp) 
+
 
 target_link_libraries(slam_node
   onnxruntime
@@ -64,6 +67,7 @@ target_link_libraries(optimizer_node
 ament_target_dependencies(slam_node
   yaets
   tf2_ros
+  tf2_eigen
   rclcpp
   pcl_conversions
   cv_bridge
@@ -93,6 +97,28 @@ ament_target_dependencies(optimizer_node
   PCL
 )
 
+ament_target_dependencies(mapper_node
+  yaets
+  tf2_ros
+  tf2_eigen
+  rclcpp
+  pcl_conversions
+  cv_bridge
+  nav_msgs
+  std_msgs
+  sensor_msgs
+  tf2_geometry_msgs
+  OpenCV
+  CUDA
+  PCL
+  tf2_ros
+)
+
+target_link_libraries(mapper_node
+  ${OpenCV_LIBS}
+  ${PCL_LIBRARIES}
+)
+
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   set(ament_cmake_cpplint_FOUND TRUE)
@@ -109,6 +135,10 @@ install(TARGETS utils_node
 )
 
 install(TARGETS optimizer_node  # Install optimizer_node
+  DESTINATION lib/${PROJECT_NAME}
+)
+
+install(TARGETS mapper_node  # Install optimizer_node
   DESTINATION lib/${PROJECT_NAME}
 )
 

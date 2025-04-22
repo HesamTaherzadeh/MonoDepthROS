@@ -1,7 +1,0 @@
-build/
-logs/
-devel/
-*.onnx
-.vscode/
-install/
-*.pdf

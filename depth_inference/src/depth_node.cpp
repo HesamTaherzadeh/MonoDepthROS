@@ -74,7 +74,7 @@ void SlamNode::image_callback(const sensor_msgs::msg::Image::SharedPtr msg) {
     std_msgs::msg::Header header;
     header.stamp = msg->header.stamp;
     time =  header.stamp;
-    header.frame_id = "left"; 
+    header.frame_id = "camera_color_left"; 
 
     sensor_msgs::msg::Image::SharedPtr left_msg = cv_bridge::CvImage(
         header, 
@@ -84,44 +84,25 @@ void SlamNode::image_callback(const sensor_msgs::msg::Image::SharedPtr msg) {
     left_image_publisher_->publish(*left_msg);
 
     cv::Mat depth_image = context->runInference(input_image);
-    
-    // cv::imwrite("/home/hesam/Desktop/depth_eval/output/depth_" + std::to_string(index) + ".png" , depth_image);
-    // cv::imwrite("/home/hesam/Desktop/depth_eval/output/image_" + std::to_string(index) + ".png" , input_image);
-    ++index;
 
-    depth_buffer_.push_back(depth_image);
-    if (depth_buffer_.size() > 5) {
-        depth_buffer_.pop_front();
+    header.frame_id = "camera_color_left"; 
+    sensor_msgs::msg::Image::SharedPtr depth_msg = cv_bridge::CvImage(
+        header, 
+        sensor_msgs::image_encodings::TYPE_32FC1, 
+        depth_image
+    ).toImageMsg();
+    depth_image_publisher_->publish(*depth_msg);
+
+    if (last_camera_info_) {
+        sensor_msgs::msg::CameraInfo camera_info_msg = *last_camera_info_;
+        camera_info_msg.header.stamp = header.stamp;
+        camera_info_msg.header.frame_id = header.frame_id;
+        camera_info_msg.height = input_image.rows;
+        camera_info_msg.width = input_image.cols;
+        camera_info_publisher_->publish(camera_info_msg);
     }
-
-    if (depth_buffer_.size() == 5) {
-        cv::Mat depth_sum = cv::Mat::zeros(depth_image.size(), CV_32FC1);
-        for (const auto &dimg : depth_buffer_) {
-            depth_sum += dimg;
-        }
-        cv::Mat depth_avg = depth_sum / static_cast<float>(depth_buffer_.size());
         
-        double minVal, maxVal;
-        cv::minMaxLoc(depth_avg, &minVal, &maxVal);
-        std::cout << "Averaged Depth Image Min: " << minVal << ", Max: " << maxVal << std::endl;
-
-        header.frame_id = "camera_link"; 
-        sensor_msgs::msg::Image::SharedPtr depth_msg = cv_bridge::CvImage(
-            header, 
-            sensor_msgs::image_encodings::TYPE_32FC1, 
-            depth_avg
-        ).toImageMsg();
-        depth_image_publisher_->publish(*depth_msg);
-
-        if (last_camera_info_) {
-            sensor_msgs::msg::CameraInfo camera_info_msg = *last_camera_info_;
-            camera_info_msg.header.stamp = header.stamp;
-            camera_info_msg.header.frame_id = header.frame_id;
-            camera_info_msg.height = input_image.rows;
-            camera_info_msg.width = input_image.cols;
-            camera_info_publisher_->publish(camera_info_msg);
-        }
-    }
+    
 }
 
 void SlamNode::camera_info_callback(const sensor_msgs::msg::CameraInfo::SharedPtr msg) {

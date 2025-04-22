@@ -1,5 +1,13 @@
 <robot name="robot">
   <link name="odom"/>
+  <link name="base_link"/>
+  <link name="imu_link"/>
+  
+  <link name="velo_link"/>
+  <link name="camera_gray_left"/>
+  <link name="camera_gray_right"/>
+  <link name="camera_color_left"/>
+  <link name="camera_color_right"/>
 
   <joint name="odom_to_base" type="fixed">
     <parent link="odom"/>
@@ -7,29 +15,44 @@
     <origin xyz="0 0 0" rpy="0 0 0"/>
   </joint>
 
-  <link name="base_link"/>
-
-  <joint name="base_to_camera" type="fixed">
+  <joint name="base_to_imu" type="fixed">
     <parent link="base_link"/>
-    <child link="camera_link"/>
-    <origin xyz="0 0 0" rpy="1.57 3.14 0"/> 
+    <child link="imu_link"/>
+    <origin xyz="-1.405 0.32 0.93" rpy="0 0 0"/>
   </joint>
 
-  <link name="camera_link"/>
-
-  <joint name="camera_to_left" type="fixed">
-    <parent link="camera_link"/>
-    <child link="left"/>
-    <origin xyz="0 0 0" rpy="0 0 0"/>
+  <joint name="imu_to_velo" type="fixed">
+    <parent link="imu_link"/>
+    <child link="velo_link"/>
+    <origin xyz="0.8105 -0.30705 0.80272" 
+            rpy="-0.014824 0.00203 0.00077"/>
   </joint>
 
-  <link name="left"/>
-
-  <joint name="camera_to_right" type="fixed">
-    <parent link="camera_link"/>
-    <child link="right"/>
-    <origin xyz="0 0 0" rpy="0 0 0"/>
+  <joint name="imu_to_gray_left" type="fixed">
+    <parent link="imu_link"/>
+    <child link="camera_gray_left"/>
+    <origin xyz="1.10224 -0.31907 0.74607" 
+            rpy="-1.5708 -0.0 3.1416"/>
   </joint>
 
-  <link name="right"/>
+  <joint name="imu_to_gray_right" type="fixed">
+    <parent link="imu_link"/>
+    <child link="camera_gray_right"/>
+    <origin xyz="1.10289 -0.85623 0.74969" 
+            rpy="-1.5708 -0.0 3.1416"/>
+  </joint>
+
+  <joint name="imu_to_color_left" type="fixed">
+    <parent link="imu_link"/>
+    <child link="camera_color_left"/>
+    <origin xyz="1.10217 -0.25594 0.74564" 
+            rpy="-1.5708 -0.0 3.1416"/>
+  </joint>
+
+  <joint name="imu_to_color_right" type="fixed">
+    <parent link="imu_link"/>
+    <child link="camera_color_right"/>
+    <origin xyz="1.10280 -0.78826 0.74923" 
+            rpy="-1.5708 -0.0 3.1416"/>
+  </joint>
 </robot>

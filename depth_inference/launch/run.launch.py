@@ -44,7 +44,7 @@ def generate_launch_description():
         
         # Rosbag play process
         ExecuteProcess(
-            cmd=['ros2', 'bag', 'play', '/home/hesam/Desktop/datasets/kitti_raw/kitti_2011_10_03_drive_0027_synced'],
+            cmd=['ros2', 'bag', 'play', '/home/hesam/Desktop/datasets/outputKITTIros2', '-r', '0.5'],
             output='log'
         ),
 
@@ -72,11 +72,13 @@ def generate_launch_description():
                         "topic_queue_size": 10000,
                         "sync_queue_size": 10000,
                         "qos": 1,
-                        "subscribe_rgbd": False
+                        "subscribe_rgbd": False,
+                        "subscribe_imu": True
                     }],
                     remappings=[
                         ("rgb/image", "/left"),
                         ("depth/image", "/depth_image"),
+                        ("imu", "/kitti/oxts/imu"),
                     ],
                     output='screen'
                 ),
@@ -111,7 +113,7 @@ def generate_launch_description():
                     remappings=[
                         ('/rgb/image', '/left'),
                         ('/depth/image', '/depth_image'),
-                        # ('/odom', 'optimized_odom')
+                        ('/odom', 'optimized_odom')
                     ]
                 ),
             ]
