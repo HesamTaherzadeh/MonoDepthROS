@@ -35,7 +35,7 @@ def generate_launch_description():
         
         # Rosbag play process
         ExecuteProcess(
-            cmd=['ros2', 'bag', 'play', '/home/hesam/Desktop/datasets/outputKITTIros2'],
+            cmd=['ros2', 'bag', 'play', '/home/hesam/Desktop/datasets/outputKITTIros2', '-r 0.8'],
             output='log'
         ),
         
